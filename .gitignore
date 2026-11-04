@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.db
+node_modules/
+.next/
+frontend/next-env.d.ts
+*.tsbuildinfo
+models/artifacts/
+*.egg-info/
