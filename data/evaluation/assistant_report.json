@@ -1,0 +1,35 @@
+{
+ "assistant_version": "extractive-v1",
+ "embedding": "lsa",
+ "method": "hybrid",
+ "article_threshold": 0.5217,
+ "protocol": {
+  "queries": 97,
+  "with_matching_article": 69,
+  "without_matching_article": 28,
+  "note": "Threshold was chosen on validation data (see retrieval_report.json) and applied once to test."
+ },
+ "results": {
+  "safe_outcome_rate": 0.845,
+  "safe_outcome_ci95": [
+   0.773,
+   0.907
+  ],
+  "safe_outcome_definition": "correct cited steps offered when a matching article exists, or declined when none exists",
+  "answered_when_article_exists": 0.841,
+  "correct_when_answered": 1.0,
+  "wrongly_declined_when_article_exists": 11,
+  "declined_when_no_article": 24,
+  "no_article_queries": 28,
+  "wrongly_answered_when_no_article": 4,
+  "step_citation_integrity": 1.0,
+  "past_resolution_from_same_scenario": 0.546,
+  "queries_with_past_resolutions": 97
+ },
+ "caveats": [
+  "Synthetic data from the project's own generator; article labels were assigned by the project author and not reviewed by a human.",
+  "This measures whether the assistant picks and cites the right article or declines. It does not measure whether following the steps resolves a ticket.",
+  "Step citation integrity is true by construction (steps are copied from articles); it is checked, not an achievement.",
+  "Small samples: see the interval. Real tickets would likely score lower."
+ ]
+}

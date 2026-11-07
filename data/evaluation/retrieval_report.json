@@ -1,0 +1,226 @@
+{
+ "embedding": {
+  "used": "lsa",
+  "requested": "lsa",
+  "fallback_reason": null
+ },
+ "protocol": {
+  "ticket_corpus": "191 primary-split train tickets",
+  "ticket_queries": "97 primary-split test tickets",
+  "article_corpus": "32 original sample articles",
+  "article_queries": "69 test tickets with a labelled article",
+  "unlabelled_test_queries": 28,
+  "relevance_ticket": "same scenario family (different phrasing template from every corpus ticket)",
+  "relevance_article": "author-assigned family->article labels (data/knowledge/relevance_labels.json)",
+  "threshold_selection": "lowest top-1 score on validation with >=80% precision over >=10 queries, counting an article shown for a ticket that has no matching article as wrong"
+ },
+ "similar_incidents": {
+  "lexical": {
+   "queries": 97,
+   "mrr": 0.454,
+   "mrr_ci95": [
+    0.373,
+    0.543
+   ],
+   "hit_at_1_ci95": [
+    0.247,
+    0.433
+   ],
+   "precision_at_1": 0.34,
+   "recall_at_1": 0.095,
+   "hit_at_1": 0.34,
+   "ndcg_at_1": 0.34,
+   "precision_at_3": 0.361,
+   "recall_at_3": 0.316,
+   "hit_at_3": 0.557,
+   "ndcg_at_3": 0.393,
+   "precision_at_5": 0.328,
+   "recall_at_5": 0.434,
+   "hit_at_5": 0.629,
+   "ndcg_at_5": 0.414
+  },
+  "semantic": {
+   "queries": 97,
+   "mrr": 0.462,
+   "mrr_ci95": [
+    0.379,
+    0.552
+   ],
+   "hit_at_1_ci95": [
+    0.278,
+    0.454
+   ],
+   "precision_at_1": 0.361,
+   "recall_at_1": 0.103,
+   "hit_at_1": 0.361,
+   "ndcg_at_1": 0.361,
+   "precision_at_3": 0.375,
+   "recall_at_3": 0.32,
+   "hit_at_3": 0.546,
+   "ndcg_at_3": 0.405,
+   "precision_at_5": 0.342,
+   "recall_at_5": 0.449,
+   "hit_at_5": 0.629,
+   "ndcg_at_5": 0.429
+  },
+  "hybrid": {
+   "queries": 97,
+   "mrr": 0.458,
+   "mrr_ci95": [
+    0.377,
+    0.55
+   ],
+   "hit_at_1_ci95": [
+    0.258,
+    0.444
+   ],
+   "precision_at_1": 0.351,
+   "recall_at_1": 0.101,
+   "hit_at_1": 0.351,
+   "ndcg_at_1": 0.351,
+   "precision_at_3": 0.371,
+   "recall_at_3": 0.323,
+   "hit_at_3": 0.567,
+   "ndcg_at_3": 0.402,
+   "precision_at_5": 0.338,
+   "recall_at_5": 0.444,
+   "hit_at_5": 0.629,
+   "ndcg_at_5": 0.424
+  }
+ },
+ "articles": {
+  "lexical": {
+   "queries": 69,
+   "mrr": 0.986,
+   "mrr_ci95": [
+    0.964,
+    1.0
+   ],
+   "hit_at_1_ci95": [
+    0.928,
+    1.0
+   ],
+   "precision_at_1": 0.971,
+   "recall_at_1": 0.971,
+   "hit_at_1": 0.971,
+   "ndcg_at_1": 0.971,
+   "precision_at_3": 0.333,
+   "recall_at_3": 1.0,
+   "hit_at_3": 1.0,
+   "ndcg_at_3": 0.989,
+   "precision_at_5": 0.2,
+   "recall_at_5": 1.0,
+   "hit_at_5": 1.0,
+   "ndcg_at_5": 0.989
+  },
+  "semantic": {
+   "queries": 69,
+   "mrr": 0.986,
+   "mrr_ci95": [
+    0.964,
+    1.0
+   ],
+   "hit_at_1_ci95": [
+    0.928,
+    1.0
+   ],
+   "precision_at_1": 0.971,
+   "recall_at_1": 0.971,
+   "hit_at_1": 0.971,
+   "ndcg_at_1": 0.971,
+   "precision_at_3": 0.333,
+   "recall_at_3": 1.0,
+   "hit_at_3": 1.0,
+   "ndcg_at_3": 0.989,
+   "precision_at_5": 0.2,
+   "recall_at_5": 1.0,
+   "hit_at_5": 1.0,
+   "ndcg_at_5": 0.989
+  },
+  "hybrid": {
+   "queries": 69,
+   "mrr": 0.986,
+   "mrr_ci95": [
+    0.964,
+    1.0
+   ],
+   "hit_at_1_ci95": [
+    0.928,
+    1.0
+   ],
+   "precision_at_1": 0.971,
+   "recall_at_1": 0.971,
+   "hit_at_1": 0.971,
+   "ndcg_at_1": 0.971,
+   "precision_at_3": 0.333,
+   "recall_at_3": 1.0,
+   "hit_at_3": 1.0,
+   "ndcg_at_3": 0.989,
+   "precision_at_5": 0.2,
+   "recall_at_5": 1.0,
+   "hit_at_5": 1.0,
+   "ndcg_at_5": 0.989
+  }
+ },
+ "similar_incident_top1_same_category": {
+  "lexical": 0.66,
+  "semantic": 0.629,
+  "hybrid": 0.639
+ },
+ "thresholds": {
+  "similar_incidents": {
+   "lexical": null,
+   "semantic": null,
+   "hybrid": null
+  },
+  "articles": {
+   "lexical": 0.2118,
+   "semantic": 0.7997,
+   "hybrid": 0.5217
+  }
+ },
+ "latency_ms_median": {
+  "similar_incidents": {
+   "lexical": 0.84,
+   "semantic": 1.35,
+   "hybrid": 2.21
+  },
+  "articles": {
+   "lexical": 0.87,
+   "semantic": 1.24,
+   "hybrid": 1.34
+  }
+ },
+ "caveats": [
+  "All data is synthetic and produced by the project's own generator, so these numbers show the pipeline works on its own data distribution, not real-world accuracy.",
+  "Ticket relevance is defined by generator family; the generator reuses a small set of phrasings per family, so ticket retrieval is easier than it would be on real tickets.",
+  "Article labels were assigned by the project author (an AI assistant) and have not been reviewed by a human.",
+  "If embedding.used is 'lsa', the semantic scorer is local latent semantic analysis, not a pretrained sentence-embedding model."
+ ],
+ "article_threshold_on_test": {
+  "lexical": {
+   "threshold": 0.2118,
+   "labelled_queries_answered": 62,
+   "labelled_answer_precision": 0.968,
+   "labelled_coverage": 0.899,
+   "unlabelled_queries_wrongly_answered": 4,
+   "unlabelled_queries": 28
+  },
+  "semantic": {
+   "threshold": 0.7997,
+   "labelled_queries_answered": 58,
+   "labelled_answer_precision": 1.0,
+   "labelled_coverage": 0.841,
+   "unlabelled_queries_wrongly_answered": 4,
+   "unlabelled_queries": 28
+  },
+  "hybrid": {
+   "threshold": 0.5217,
+   "labelled_queries_answered": 58,
+   "labelled_answer_precision": 1.0,
+   "labelled_coverage": 0.841,
+   "unlabelled_queries_wrongly_answered": 4,
+   "unlabelled_queries": 28
+  }
+ }
+}

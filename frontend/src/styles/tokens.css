@@ -1,0 +1,61 @@
+/* Design tokens. Colours are RGB triplets so Tailwind can apply alpha (rgb(var(--x) / .5)).
+   Light is the default; dark applies via [data-theme="dark"] (set by ThemeProvider). */
+:root {
+  /* surfaces + text */
+  --paper: 247 249 252;
+  --panel: 255 255 255;
+  --elevated: 255 255 255;
+  --ink: 17 24 39;
+  --muted: 100 116 139;
+  --line: 226 232 240;
+  /* accents */
+  --brand: 79 70 229;
+  --on-brand: 255 255 255;
+  --info: 37 99 235;
+  /* AI-generated content keeps its own amber so it is never mistaken for ticket facts */
+  --ai: 161 98 7;
+  /* semantic */
+  --ok: 21 128 61;
+  --warn: 180 83 9;
+  --danger: 185 28 28;
+
+  /* radii, shadows */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
+  --shadow-md: 0 4px 12px rgb(15 23 42 / 0.08);
+  --shadow-lg: 0 12px 32px rgb(15 23 42 / 0.14);
+
+  /* layout */
+  --sidebar-w: 15rem;
+  --sidebar-w-collapsed: 4.25rem;
+  --header-h: 3.5rem;
+  --container-max: 80rem;
+
+  /* motion */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur-fast: 150ms;
+  --dur: 200ms;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --paper: 11 16 32;
+  --panel: 17 24 39;
+  --elevated: 23 32 51;
+  --ink: 248 250 252;
+  --muted: 148 163 184;
+  --line: 38 50 71;
+  --brand: 129 140 248;
+  --on-brand: 11 16 32;
+  --info: 96 165 250;
+  --ai: 232 176 76;
+  --ok: 74 200 120;
+  --warn: 251 191 36;
+  --danger: 248 113 113;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}

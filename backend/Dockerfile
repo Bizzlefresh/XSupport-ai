@@ -7,7 +7,10 @@ COPY backend/app backend/app
 RUN pip install --no-cache-dir ./backend
 COPY backend backend
 COPY scripts scripts
+COPY data data
 WORKDIR /srv/backend
+# Train at build time so the model matches the installed scikit-learn exactly (pickled models are version-bound).
+RUN python ../scripts/train_classifier.py
 RUN useradd --create-home appuser && chown -R appuser /srv
 USER appuser
 EXPOSE 8000

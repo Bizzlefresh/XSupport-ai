@@ -1,0 +1,26 @@
+@import "./tokens.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { @apply bg-paper font-sans text-ink antialiased; font-feature-settings: "cv11", "ss01"; }
+:focus-visible { outline: 2px solid rgb(var(--brand)); outline-offset: 2px; }
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* skeleton shimmer */
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+.skeleton { position: relative; overflow: hidden; background: rgb(var(--line) / 0.7); border-radius: var(--radius-sm); }
+.skeleton::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(var(--panel) / 0.6), transparent);
+  animation: shimmer 1.4s infinite;
+}
+@keyframes pop-in { from { opacity: 0; transform: translateY(4px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.anim-pop { animation: pop-in var(--dur) var(--ease); }
+.anim-fade { animation: fade-in var(--dur) var(--ease); }
+dialog::backdrop { background: rgb(2 6 23 / 0.55); animation: fade-in var(--dur) var(--ease); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}

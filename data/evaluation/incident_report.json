@@ -1,0 +1,77 @@
+{
+ "rule": "5 or more tickets in one category within 3 hours (fixed in advance, not tuned)",
+ "main_dataset": {
+  "truth_bursts": 2,
+  "detected_bursts": 2,
+  "truth_found": 2,
+  "false_alarms": 0,
+  "ticket_recall": 1.0,
+  "ticket_precision": 1.0
+ },
+ "other_seeds": {
+  "seeds": "100..119",
+  "datasets": 20,
+  "ticket_recall_mean": 1.0,
+  "ticket_precision_mean": 0.992,
+  "bursts_present": 40,
+  "bursts_found": 40,
+  "false_alarms": 0
+ },
+ "sensitivity": {
+  "4 tickets / 3 h": {
+   "main_dataset": {
+    "truth_found": 2,
+    "false_alarms": 0
+   },
+   "false_alarms_over_20_seeds": 0
+  },
+  "5 tickets / 3 h": {
+   "main_dataset": {
+    "truth_found": 2,
+    "false_alarms": 0
+   },
+   "false_alarms_over_20_seeds": 0
+  },
+  "6 tickets / 3 h": {
+   "main_dataset": {
+    "truth_found": 2,
+    "false_alarms": 0
+   },
+   "false_alarms_over_20_seeds": 0
+  },
+  "8 tickets / 3 h": {
+   "main_dataset": {
+    "truth_found": 2,
+    "false_alarms": 0
+   },
+   "false_alarms_over_20_seeds": 0
+  },
+  "5 tickets / 1 h": {
+   "main_dataset": {
+    "truth_found": 2,
+    "false_alarms": 0
+   },
+   "false_alarms_over_20_seeds": 0
+  },
+  "5 tickets / 6 h": {
+   "main_dataset": {
+    "truth_found": 2,
+    "false_alarms": 0
+   },
+   "false_alarms_over_20_seeds": 1
+  },
+  "8 tickets / 6 h": {
+   "main_dataset": {
+    "truth_found": 2,
+    "false_alarms": 0
+   },
+   "false_alarms_over_20_seeds": 0
+  }
+ },
+ "caveats": [
+  "The bursts are produced by the project's own generator as tight one-morning clusters, so detecting them is easy. This shows the rule works on that shape, not that it would find real incidents.",
+  "Other seeds use the same generator and the same two burst scenarios, so they test false alarms from ordinary ticket timing, not new kinds of incident.",
+  "The detector uses category and time only. An incident that spreads over a day, or across categories, would be missed.",
+  "Real ticket arrival is bursty for ordinary reasons (start of term, Monday mornings), which could cause more false alarms than seen here."
+ ]
+}

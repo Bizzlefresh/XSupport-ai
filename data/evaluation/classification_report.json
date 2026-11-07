@@ -1,0 +1,1006 @@
+{
+ "task": "ticket category classification",
+ "disclaimer": "Synthetic data. These numbers do not establish real-world accuracy.",
+ "dataset": {
+  "file": "tickets.json",
+  "sha256": "9c985c19b08d8e35e2f9cfbb8cfa5caabbefba10c1ec6331f1c3ed06517063d0",
+  "generator_seed": 42,
+  "sizes": {
+   "test": 97,
+   "train": 191,
+   "validation": 95
+  },
+  "sizes_stress": {
+   "train": 242,
+   "test": 63,
+   "validation": 78
+  },
+  "labels": [
+   "Account and Authentication",
+   "Classroom and AV Support",
+   "Email and Collaboration",
+   "General IT Support",
+   "Hardware and Devices",
+   "Network and Connectivity",
+   "Security-Related Issues",
+   "Software and Applications"
+  ]
+ },
+ "protocol": "Primary: template-level split (new wording of known problems). Stress: family-level split (unseen problem types). Hyperparameters and model choice on primary validation only; test evaluated once.",
+ "environment": {
+  "python": "3.13.18",
+  "scikit_learn": "1.9.1",
+  "numpy": "2.5.4"
+ },
+ "deployed": {
+  "name": "tfidf_logreg",
+  "version": "v1-9c985c19",
+  "params": {
+   "C": 30.0
+  },
+  "confidence_threshold": 0.5,
+  "threshold_rule": "lowest threshold on validation with >=90% precision among accepted (min 10 tickets)"
+ },
+ "models": {
+  "majority_baseline": {
+   "params": {},
+   "validation": {
+    "accuracy": 0.1579,
+    "macro_precision": 0.0197,
+    "macro_recall": 0.125,
+    "macro_f1": 0.0341
+   },
+   "test": {
+    "n": 97,
+    "accuracy": 0.134,
+    "macro_precision": 0.0168,
+    "macro_recall": 0.125,
+    "macro_f1": 0.0295,
+    "per_category": {
+     "Account and Authentication": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 12
+     },
+     "Classroom and AV Support": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 9
+     },
+     "Email and Collaboration": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 10
+     },
+     "General IT Support": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 13
+     },
+     "Hardware and Devices": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 13
+     },
+     "Network and Connectivity": {
+      "precision": 0.134,
+      "recall": 1.0,
+      "f1": 0.2364,
+      "support": 13
+     },
+     "Security-Related Issues": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 14
+     },
+     "Software and Applications": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 13
+     }
+    },
+    "confusion_matrix": {
+     "labels": [
+      "Account and Authentication",
+      "Classroom and AV Support",
+      "Email and Collaboration",
+      "General IT Support",
+      "Hardware and Devices",
+      "Network and Connectivity",
+      "Security-Related Issues",
+      "Software and Applications"
+     ],
+     "matrix": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       12,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       9,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       10,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       13,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       13,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       13,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       14,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       13,
+       0,
+       0
+      ]
+     ]
+    }
+   },
+   "calibration_test": {
+    "ece": 0.866,
+    "bins": [
+     {
+      "range": "0.8-1.0",
+      "n": 97,
+      "mean_confidence": 1.0,
+      "accuracy": 0.134
+     }
+    ]
+   },
+   "threshold_test": {
+    "threshold": 0.5,
+    "coverage": 1.0,
+    "accuracy_when_confident": 0.134,
+    "sent_to_manual_review": 0,
+    "errors_caught_by_threshold": 0,
+    "total_errors": 84
+   },
+   "stress_novel_problem_types_test": {
+    "n": 63,
+    "accuracy": 0.127,
+    "macro_precision": 0.0159,
+    "macro_recall": 0.125,
+    "macro_f1": 0.0282
+   }
+  },
+  "tfidf_logreg": {
+   "params": {
+    "C": 30.0
+   },
+   "validation": {
+    "accuracy": 0.7895,
+    "macro_precision": 0.7936,
+    "macro_recall": 0.7524,
+    "macro_f1": 0.7551
+   },
+   "test": {
+    "n": 97,
+    "accuracy": 0.6392,
+    "macro_precision": 0.634,
+    "macro_recall": 0.6588,
+    "macro_f1": 0.599,
+    "per_category": {
+     "Account and Authentication": {
+      "precision": 0.5,
+      "recall": 0.8333,
+      "f1": 0.625,
+      "support": 12
+     },
+     "Classroom and AV Support": {
+      "precision": 0.6,
+      "recall": 1.0,
+      "f1": 0.75,
+      "support": 9
+     },
+     "Email and Collaboration": {
+      "precision": 0.6667,
+      "recall": 0.8,
+      "f1": 0.7273,
+      "support": 10
+     },
+     "General IT Support": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 13
+     },
+     "Hardware and Devices": {
+      "precision": 1.0,
+      "recall": 0.3077,
+      "f1": 0.4706,
+      "support": 13
+     },
+     "Network and Connectivity": {
+      "precision": 0.5909,
+      "recall": 1.0,
+      "f1": 0.7429,
+      "support": 13
+     },
+     "Security-Related Issues": {
+      "precision": 0.7143,
+      "recall": 0.7143,
+      "f1": 0.7143,
+      "support": 14
+     },
+     "Software and Applications": {
+      "precision": 1.0,
+      "recall": 0.6154,
+      "f1": 0.7619,
+      "support": 13
+     }
+    },
+    "confusion_matrix": {
+     "labels": [
+      "Account and Authentication",
+      "Classroom and AV Support",
+      "Email and Collaboration",
+      "General IT Support",
+      "Hardware and Devices",
+      "Network and Connectivity",
+      "Security-Related Issues",
+      "Software and Applications"
+     ],
+     "matrix": [
+      [
+       10,
+       0,
+       0,
+       2,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       9,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       8,
+       0,
+       0,
+       0,
+       2,
+       0
+      ],
+      [
+       5,
+       4,
+       0,
+       0,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       2,
+       0,
+       0,
+       4,
+       5,
+       2,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       13,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       4,
+       0,
+       0,
+       0,
+       10,
+       0
+      ],
+      [
+       5,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       8
+      ]
+     ]
+    }
+   },
+   "calibration_test": {
+    "ece": 0.1472,
+    "bins": [
+     {
+      "range": "0.2-0.4",
+      "n": 49,
+      "mean_confidence": 0.318,
+      "accuracy": 0.347
+     },
+     {
+      "range": "0.4-0.6",
+      "n": 20,
+      "mean_confidence": 0.482,
+      "accuracy": 0.85
+     },
+     {
+      "range": "0.6-0.8",
+      "n": 12,
+      "mean_confidence": 0.682,
+      "accuracy": 1.0
+     },
+     {
+      "range": "0.8-1.0",
+      "n": 16,
+      "mean_confidence": 0.894,
+      "accuracy": 1.0
+     }
+    ]
+   },
+   "threshold_test": {
+    "threshold": 0.5,
+    "coverage": 0.3608,
+    "accuracy_when_confident": 0.9714,
+    "sent_to_manual_review": 62,
+    "errors_caught_by_threshold": 34,
+    "total_errors": 35
+   },
+   "stress_novel_problem_types_test": {
+    "n": 63,
+    "accuracy": 0.4444,
+    "macro_precision": 0.2513,
+    "macro_recall": 0.4286,
+    "macro_f1": 0.315
+   }
+  },
+  "tfidf_svm": {
+   "params": {
+    "C": 0.3
+   },
+   "validation": {
+    "accuracy": 0.7789,
+    "macro_precision": 0.7867,
+    "macro_recall": 0.7428,
+    "macro_f1": 0.7463
+   },
+   "test": {
+    "n": 97,
+    "accuracy": 0.6907,
+    "macro_precision": 0.7409,
+    "macro_recall": 0.7111,
+    "macro_f1": 0.6834,
+    "per_category": {
+     "Account and Authentication": {
+      "precision": 0.4706,
+      "recall": 0.6667,
+      "f1": 0.5517,
+      "support": 12
+     },
+     "Classroom and AV Support": {
+      "precision": 0.8182,
+      "recall": 1.0,
+      "f1": 0.9,
+      "support": 9
+     },
+     "Email and Collaboration": {
+      "precision": 0.7143,
+      "recall": 1.0,
+      "f1": 0.8333,
+      "support": 10
+     },
+     "General IT Support": {
+      "precision": 0.5,
+      "recall": 0.3077,
+      "f1": 0.381,
+      "support": 13
+     },
+     "Hardware and Devices": {
+      "precision": 1.0,
+      "recall": 0.3077,
+      "f1": 0.4706,
+      "support": 13
+     },
+     "Network and Connectivity": {
+      "precision": 0.5909,
+      "recall": 1.0,
+      "f1": 0.7429,
+      "support": 13
+     },
+     "Security-Related Issues": {
+      "precision": 0.8333,
+      "recall": 0.7143,
+      "f1": 0.7692,
+      "support": 14
+     },
+     "Software and Applications": {
+      "precision": 1.0,
+      "recall": 0.6923,
+      "f1": 0.8182,
+      "support": 13
+     }
+    },
+    "confusion_matrix": {
+     "labels": [
+      "Account and Authentication",
+      "Classroom and AV Support",
+      "Email and Collaboration",
+      "General IT Support",
+      "Hardware and Devices",
+      "Network and Connectivity",
+      "Security-Related Issues",
+      "Software and Applications"
+     ],
+     "matrix": [
+      [
+       8,
+       0,
+       0,
+       4,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       9,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       10,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       5,
+       0,
+       0,
+       4,
+       0,
+       4,
+       0,
+       0
+      ],
+      [
+       0,
+       2,
+       0,
+       0,
+       4,
+       5,
+       2,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       13,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       4,
+       0,
+       0,
+       0,
+       10,
+       0
+      ],
+      [
+       4,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       9
+      ]
+     ]
+    }
+   },
+   "calibration_test": {
+    "ece": 0.2193,
+    "bins": [
+     {
+      "range": "0.2-0.4",
+      "n": 51,
+      "mean_confidence": 0.319,
+      "accuracy": 0.529
+     },
+     {
+      "range": "0.4-0.6",
+      "n": 17,
+      "mean_confidence": 0.488,
+      "accuracy": 0.706
+     },
+     {
+      "range": "0.6-0.8",
+      "n": 20,
+      "mean_confidence": 0.688,
+      "accuracy": 0.95
+     },
+     {
+      "range": "0.8-1.0",
+      "n": 9,
+      "mean_confidence": 0.821,
+      "accuracy": 1.0
+     }
+    ]
+   },
+   "threshold_test": {
+    "threshold": 0.5,
+    "coverage": 0.3814,
+    "accuracy_when_confident": 0.9459,
+    "sent_to_manual_review": 60,
+    "errors_caught_by_threshold": 28,
+    "total_errors": 30
+   },
+   "stress_novel_problem_types_test": {
+    "n": 63,
+    "accuracy": 0.4603,
+    "macro_precision": 0.38,
+    "macro_recall": 0.4442,
+    "macro_f1": 0.346
+   }
+  }
+ },
+ "test_uncertainty_bootstrap": {
+  "tfidf_logreg": {
+   "accuracy_95ci": [
+    0.546,
+    0.732
+   ],
+   "macro_f1_95ci": [
+    0.503,
+    0.677
+   ]
+  },
+  "tfidf_svm": {
+   "accuracy_95ci": [
+    0.598,
+    0.784
+   ],
+   "macro_f1_95ci": [
+    0.585,
+    0.772
+   ]
+  },
+  "majority_baseline": {
+   "accuracy_95ci": [
+    0.072,
+    0.206
+   ],
+   "macro_f1_95ci": [
+    0.017,
+    0.043
+   ]
+  },
+  "paired_accuracy_difference": {
+   "models": "tfidf_logreg minus tfidf_svm",
+   "mean": -0.053,
+   "95ci": [
+    -0.113,
+    0.01
+   ],
+   "interpretation": "interval includes 0 => no reliable difference at this sample size"
+  }
+ },
+ "deployed_test_errors": [
+  {
+   "id": "SYN-0002",
+   "family": "gen_equipment_request",
+   "true": "General IT Support",
+   "predicted": "Classroom and AV Support",
+   "confidence": 0.26,
+   "text": "Need a laptop for a new project. Need a laptop for a new project. I would like a quote for a webcam and headset for remote teaching."
+  },
+  {
+   "id": "SYN-0039",
+   "family": "amb_software_account",
+   "true": "Software and Applications",
+   "predicted": "Account and Authentication",
+   "confidence": 0.349,
+   "text": "Adobe Acrobat says my account has no access. Adobe Acrobat says my account has no access. Tried to open Adobe Acrobat and got an access error even though my lic"
+  },
+  {
+   "id": "SYN-0062",
+   "family": "hw_laptop_battery_screen",
+   "true": "Hardware and Devices",
+   "predicted": "Security-Related Issues",
+   "confidence": 0.305,
+   "text": "Cracked screen on MacBook Air. Cracked screen on MacBook Air. I dropped my MacBook Air and the display is cracked and flickering. It is university owned."
+  },
+  {
+   "id": "SYN-0086",
+   "family": "acc_new_user",
+   "true": "Account and Authentication",
+   "predicted": "General IT Support",
+   "confidence": 0.405,
+   "text": "Account needed for new hire in Registrar. Account needed for new hire in Registrar. Good morning, Please set up logins for our new a grad student, start date is"
+  },
+  {
+   "id": "SYN-0094",
+   "family": "hw_peripherals",
+   "true": "Hardware and Devices",
+   "predicted": "Network and Connectivity",
+   "confidence": 0.279,
+   "text": "Monitor has no display. Monitor has no display. Hey team, My second montior shows no signal when connected to my Surface Pro, cbale seems fine."
+  },
+  {
+   "id": "SYN-0109",
+   "family": "hw_peripherals",
+   "true": "Hardware and Devices",
+   "predicted": "Network and Connectivity",
+   "confidence": 0.297,
+   "text": "Monitor has no display. Monitor has no display. Hello, My second monitor shows no signal when connected to my Surface Pro, cable seems fine. Thanks!"
+  },
+  {
+   "id": "SYN-0112",
+   "family": "gen_howto",
+   "true": "General IT Support",
+   "predicted": "Network and Connectivity",
+   "confidence": 0.379,
+   "text": "Question about connecting to campus services. Question about connecting to campus services. I am not sure how to access the file share from home, is there a gui"
+  },
+  {
+   "id": "SYN-0135",
+   "family": "amb_software_account",
+   "true": "Software and Applications",
+   "predicted": "Account and Authentication",
+   "confidence": 0.362,
+   "text": "Adobe Acrobat says my account has no access. Adobe Acrobat says my account has no access. URGENT: Tried to open Adobe Acrobat and got an access error even thoug"
+  },
+  {
+   "id": "SYN-0136",
+   "family": "sec_phishing",
+   "true": "Security-Related Issues",
+   "predicted": "Email and Collaboration",
+   "confidence": 0.392,
+   "text": "Possible phishing message received. Possible phishing message received. Please help - Got a strange message about my mailbox being deactivated with a login link"
+  },
+  {
+   "id": "SYN-0153",
+   "family": "acc_new_user",
+   "true": "Account and Authentication",
+   "predicted": "General IT Support",
+   "confidence": 0.363,
+   "text": "Account needed for new hire in Admissions. Account needed for new hire in Admissions. Please set up logins for our new an adjunct instructor, start date is next"
+  },
+  {
+   "id": "SYN-0173",
+   "family": "hw_peripherals",
+   "true": "Hardware and Devices",
+   "predicted": "Classroom and AV Support",
+   "confidence": 0.299,
+   "text": "Monitor has no display. Monitor has no display. My second monitor shows no signal when connected to my Surface Pro, cable seems fine."
+  },
+  {
+   "id": "SYN-0175",
+   "family": "hw_laptop_battery_screen",
+   "true": "Hardware and Devices",
+   "predicted": "Classroom and AV Support",
+   "confidence": 0.201,
+   "text": "Cracked screen on Surface Pro. Cracked screen on Surface Pro. I dropped my Surface Pro and the display is cracked and flickering. It is university owned."
+  },
+  {
+   "id": "SYN-0176",
+   "family": "sec_phishing",
+   "true": "Security-Related Issues",
+   "predicted": "Email and Collaboration",
+   "confidence": 0.31,
+   "text": "Possible phishing message received. Possible phishing message received. Got a strange message about my mailbox being deactivated with a login link. Only affects"
+  },
+  {
+   "id": "SYN-0178",
+   "family": "hw_laptop_battery_screen",
+   "true": "Hardware and Devices",
+   "predicted": "Security-Related Issues",
+   "confidence": 0.24,
+   "text": "Cracked screen on MacBook Air. Cracked screen on MacBook Air. Hey team, I dropped my MacBook Air and the display is cracked and flickering. It is university own"
+  },
+  {
+   "id": "SYN-0192",
+   "family": "hw_peripherals",
+   "true": "Hardware and Devices",
+   "predicted": "Network and Connectivity",
+   "confidence": 0.349,
+   "text": "Monitor has no display. Monitor has no display. My second monitor shows no signal when connected to my Android phone, cable seems fine. Appreciate any help."
+  },
+  {
+   "id": "SYN-0209",
+   "family": "gen_data_request",
+   "true": "General IT Support",
+   "predicted": "Account and Authentication",
+   "confidence": 0.342,
+   "text": "Need access to old network drive files. Need access to old network drive files. Hello, I need flies from a fromer colleague's drive in Education, who should I a"
+  },
+  {
+   "id": "SYN-0217",
+   "family": "gen_data_request",
+   "true": "General IT Support",
+   "predicted": "Account and Authentication",
+   "confidence": 0.339,
+   "text": "Need access to old network drive files. Need access to old network drive files. Hi IT, I need files from a former colleague's drive in Human Kinetics, who shoul"
+  },
+  {
+   "id": "SYN-0219",
+   "family": "gen_equipment_request",
+   "true": "General IT Support",
+   "predicted": "Classroom and AV Support",
+   "confidence": 0.313,
+   "text": "Need a laptop for a new project. Need a laptop for a new project. hello, i would like a qutoe for a webcam and haedset for remote teaching. appreciate any help."
+  },
+  {
+   "id": "SYN-0223",
+   "family": "hw_peripherals",
+   "true": "Hardware and Devices",
+   "predicted": "Network and Connectivity",
+   "confidence": 0.332,
+   "text": "Monitor has no display. Monitor has no display. Hi IT, My second monitor shows no signal when connected to my Android phone, cable seems fine. Thanks!"
+  },
+  {
+   "id": "SYN-0231",
+   "family": "gen_howto",
+   "true": "General IT Support",
+   "predicted": "Network and Connectivity",
+   "confidence": 0.378,
+   "text": "Question about connecting to campus services. Question about connecting to campus services. Hi, I am not sure how to access the file share from home, is there a"
+  },
+  {
+   "id": "SYN-0236",
+   "family": "amb_software_account",
+   "true": "Software and Applications",
+   "predicted": "Account and Authentication",
+   "confidence": 0.351,
+   "text": "Microsoft Excel says my account has no access. Microsoft Excel says my account has no access. Tried to open Microsoft Excel and got an access error even though "
+  },
+  {
+   "id": "SYN-0240",
+   "family": "hw_peripherals",
+   "true": "Hardware and Devices",
+   "predicted": "Network and Connectivity",
+   "confidence": 0.331,
+   "text": "Monitor has no display. Monitor has no display. Hi, My second monitor shows no signal when connected to my Android phone, cable seems fine."
+  },
+  {
+   "id": "SYN-0258",
+   "family": "gen_equipment_request",
+   "true": "General IT Support",
+   "predicted": "Classroom and AV Support",
+   "confidence": 0.266,
+   "text": "Need a laptop for a new project. Need a laptop for a new project. I would like a quote for a webcam and headset for remote teaching. Thanks!"
+  },
+  {
+   "id": "SYN-0260",
+   "family": "sec_phishing",
+   "true": "Security-Related Issues",
+   "predicted": "Email and Collaboration",
+   "confidence": 0.265,
+   "text": "Possible phishing message received. Possible phishing message received. Good morning, Got a strange message about my mailbox being deactivated with a login link"
+  },
+  {
+   "id": "SYN-0262",
+   "family": "sec_phishing",
+   "true": "Security-Related Issues",
+   "predicted": "Email and Collaboration",
+   "confidence": 0.286,
+   "text": "Possible phishing message received. Possible phishing message received. Hey team, Got a strange message about my mailbox being deactivated with a login link. Mu"
+  },
+  {
+   "id": "SYN-0281",
+   "family": "gen_data_request",
+   "true": "General IT Support",
+   "predicted": "Account and Authentication",
+   "confidence": 0.359,
+   "text": "Need access to old network drive files. Need access to old network drive files. I need files from a former colleague's drive in Education, who should I ask?"
+  },
+  {
+   "id": "SYN-0282",
+   "family": "gen_data_request",
+   "true": "General IT Support",
+   "predicted": "Account and Authentication",
+   "confidence": 0.333,
+   "text": "Need access to old network drive files. Need access to old network drive files. Hi IT, I need files from a former colleague's drive in Chemistry, who should I a"
+  },
+  {
+   "id": "SYN-0291",
+   "family": "gen_howto",
+   "true": "General IT Support",
+   "predicted": "Network and Connectivity",
+   "confidence": 0.36,
+   "text": "Question about connecting to campus services. Question about connecting to campus services. Please help - I am not sure how to access the file share from home, "
+  },
+  {
+   "id": "SYN-0302",
+   "family": "gen_data_request",
+   "true": "General IT Support",
+   "predicted": "Account and Authentication",
+   "confidence": 0.366,
+   "text": "Need access to old network drive files. Need access to old network drive files. Good morning, I need files from a former colleague's drive in Nursing, who shoul"
+  },
+  {
+   "id": "SYN-0304",
+   "family": "mail_shared_calendar",
+   "true": "Email and Collaboration",
+   "predicted": "Security-Related Issues",
+   "confidence": 0.244,
+   "text": "Cannot see department shared mailbox. Cannot see department shared mailbox. Hi, I was added to the shared mailbox for Business but it never appeared in Outlook."
+  },
+  {
+   "id": "SYN-0348",
+   "family": "mail_shared_calendar",
+   "true": "Email and Collaboration",
+   "predicted": "Security-Related Issues",
+   "confidence": 0.22,
+   "text": "Cannot see department shared mailbox. Cannot see department shared mailbox. Hey team, I was added to the shared mailbox for Education but it never appeared in O"
+  },
+  {
+   "id": "SYN-0367",
+   "family": "amb_software_account",
+   "true": "Software and Applications",
+   "predicted": "Account and Authentication",
+   "confidence": 0.488,
+   "text": "AutoCAD says my account has no access. AutoCAD says my account has no access. urgent: tried to open autocad and got an access error even though my licence shoul"
+  },
+  {
+   "id": "SYN-0372",
+   "family": "gen_howto",
+   "true": "General IT Support",
+   "predicted": "Network and Connectivity",
+   "confidence": 0.379,
+   "text": "Question about connecting to campus services. Question about connecting to campus services. I am not sure how to access the file share from home, is there a gui"
+  },
+  {
+   "id": "SYN-0378",
+   "family": "amb_software_account",
+   "true": "Software and Applications",
+   "predicted": "Account and Authentication",
+   "confidence": 0.581,
+   "text": "SPSS says my account has no access. SPSS says my account has no access. Hey team, Tried to open SPSS and got an access error even though my licence should be ac"
+  },
+  {
+   "id": "SYN-0382",
+   "family": "gen_equipment_request",
+   "true": "General IT Support",
+   "predicted": "Classroom and AV Support",
+   "confidence": 0.322,
+   "text": "Need a laptop for a new project. Need a laptop for a new project. Hi, I would like a quote for a webcam and headset for remote teaching. Appreciate any help."
+  }
+ ],
+ "deployed_test_family_accuracy": {
+  "acc_locked": 1.0,
+  "acc_new_user": 0.667,
+  "acc_password_reset": 1.0,
+  "amb_software_account": 0.0,
+  "amb_wifi_login": 1.0,
+  "av_lecture_capture": 1.0,
+  "av_no_sound": 1.0,
+  "av_projector_dead": 1.0,
+  "gen_data_request": 0.0,
+  "gen_equipment_request": 0.0,
+  "gen_howto": 0.0,
+  "hw_laptop_battery_screen": 0.25,
+  "hw_peripherals": 0.0,
+  "hw_printer_jam_offline": 1.0,
+  "mail_not_receiving": 1.0,
+  "mail_shared_calendar": 0.5,
+  "mail_teams_meeting": 1.0,
+  "net_dns_slow": 1.0,
+  "net_wifi_cannot_connect": 1.0,
+  "net_wifi_residence_intermittent": 1.0,
+  "sec_data_sharing": 1.0,
+  "sec_lost_device": 1.0,
+  "sec_phishing": 0.0,
+  "sw_license_expired": 1.0,
+  "sw_os_update_fail": 1.0
+ },
+ "latency": {
+  "mean_ms": 2.23,
+  "p95_ms": 2.91,
+  "samples": 150
+ },
+ "limitations": [
+  "Single synthetic dataset written by one author; vocabulary overlaps within categories more than real tickets would.",
+  "Primary test tickets are re-worded versions (second template) of problem types seen in training; the stress split shows how much worse unseen problem types are.",
+  "Only 90 phrasing templates exist, so test tickets share wording patterns (greetings, typos, slots) with training ones.",
+  "SVM calibration uses stratified (not family-grouped) folds inside training data.",
+  "Sentence-embedding classifier is deferred to Phase 4 with the embedding infrastructure."
+ ]
+}

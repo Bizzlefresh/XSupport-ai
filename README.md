@@ -4,7 +4,7 @@ AI-assisted IT helpdesk and incident management platform. Master of Applied Comp
 
 **Data and access boundaries.** XSupport AI runs entirely on *synthetic* data and does not connect to TeamDynamix or any StFX system. The TeamDynamix adapter (Phase 7) is optional, disabled by default, and must not be enabled without written StFX authorization. Nothing in this repository represents real StFX incidents.
 
-**Status:** Phase 1 (foundation) complete. See [docs/progress.md](docs/progress.md).
+**Status:** Phase 7 (optional TeamDynamix adapter, mock-tested only) complete. Thesis-ready results: docs/results.md. See [docs/progress.md](docs/progress.md).
 
 ## Quick start (Docker)
 
@@ -29,7 +29,8 @@ python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 export DATABASE_URL=sqlite:///./dev.db        # or a postgresql+psycopg:// URL
 alembic upgrade head
-python ../scripts/seed_database.py
+python ../scripts/generate_tickets.py   # optional: regenerate (committed copy already present)
+python ../scripts/seed_database.py       # loads ~390 synthetic tickets
 uvicorn app.main:app --reload
 ```
 
@@ -40,6 +41,18 @@ cd frontend
 npm install
 npm run dev        # http://localhost:3000
 ```
+
+## Classifier
+
+```bash
+cd backend && python ../scripts/train_classifier.py   # trains, evaluates, writes model_artifacts/ and data/evaluation/classification_report.json
+```
+Docker builds do this automatically. Results and caveats: `docs/methodology.md`, and the AI evaluation page in the app.
+
+## Resetting demo data
+
+The synthetic dataset changed in Phase 3. To match it exactly (this deletes tickets you created):
+`docker compose down -v && docker compose up --build`, then run the seed command again.
 
 ## Checks
 

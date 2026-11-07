@@ -15,17 +15,22 @@ dependencies = [
   "httpx>=0.27",
   "bcrypt>=4.1",
   "pyjwt>=2.8",
+  "scikit-learn>=1.5",
+  "numpy>=1.26",
+  "joblib>=1.4",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.5"]
+# Optional: real sentence-embedding model (large download). Without it, retrieval falls back to local LSA.
+embeddings = ["sentence-transformers>=3"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
 
 [tool.ruff]
-line-length = 120
+line-length = 140
 target-version = "py311"
 
 [tool.setuptools.packages.find]
@@ -35,3 +40,6 @@ include = ["app*"]
 select = ["E", "F", "I", "B", "UP"]
 ignore = ["B008"]  # FastAPI Depends() in argument defaults is the intended pattern
 exclude = ["alembic/versions"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]

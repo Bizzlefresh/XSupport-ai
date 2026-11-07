@@ -49,8 +49,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     logout() {
       tokenStore.clear();
-      qc.clear();
+      // Null the user first so the mounted observer sees it, then drop everything else cached
+      // (clearing the whole cache would detach the observer and leave the old user on screen).
       qc.setQueryData(["me"], null);
+      qc.removeQueries({ predicate: (q) => q.queryKey[0] !== "me" });
     },
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

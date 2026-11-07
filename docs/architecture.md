@@ -31,3 +31,12 @@ Planned (migration per phase), with the key design rules:
 - `knowledge_articles` with status (draft/approved) and source info; embeddings added with pgvector in Phase 4.
 - `model_evaluations`, `incident_groups` (with a verified/unverified flag), `integration_sync_state`.
 - The approved ticket priority and category are separate columns from the AI recommendation.
+
+## Retrieval (Phase 4)
+`app/ai/retrieval` holds embedders (local LSA, optional sentence-transformers), an in-process exact cosine index with lexical / semantic / hybrid scoring, and ranking metrics. `app/services/retrieval.py` builds the index from approved articles and all tickets and rebuilds it when their counts or latest update times change. It runs inside the API process, so memory grows with the corpus; pgvector is the documented scale-up path. Table `knowledge_articles` (migration `0004`) stores articles; AI outputs from retrieval are not stored, so nothing here can alter ticket data.
+
+## Troubleshooting assistant (Phase 5)
+`app/ai/troubleshooting/assistant.py` is a pure decision function over retrieved evidence; `app/services/assistant.py` gathers evidence (article and ticket indexes in `services/retrieval.py`), loads the full approved articles for their steps, stores the result in `assistant_suggestions` (migration `0005`) and records ratings. Article and ticket retrieval use separate indexes so the article threshold matches the setting it was validated in.
+
+## Analytics (Phase 6)
+`app/services/analytics.py` computes dashboard and insight figures from the database on each request. `app/services/incidents.py` is a pure function (category, time) over tickets. Evaluation outputs are JSON reports in `data/evaluation/`, merged into `docs/results.md` by `scripts/build_results.py`.

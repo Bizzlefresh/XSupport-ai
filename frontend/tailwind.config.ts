@@ -1,26 +1,27 @@
 import type { Config } from "tailwindcss";
 
-// Palette: cool paper/ink neutrals, one institutional blue, and a distinct amber
-// reserved for "AI-generated" content so suggestions are visibly separate from ticket facts.
+// Tokens live in src/styles/tokens.css. Amber (`ai`) is reserved for AI-generated content
+// so suggestions stay visibly separate from ticket facts.
+const c = (n: string) => `rgb(var(--${n}) / <alpha-value>)`;
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
-  darkMode: "media",
+  darkMode: ["selector", '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
-        paper: "rgb(var(--paper) / <alpha-value>)",
-        panel: "rgb(var(--panel) / <alpha-value>)",
-        ink: "rgb(var(--ink) / <alpha-value>)",
-        muted: "rgb(var(--muted) / <alpha-value>)",
-        line: "rgb(var(--line) / <alpha-value>)",
-        brand: "rgb(var(--brand) / <alpha-value>)",
-        ai: "rgb(var(--ai) / <alpha-value>)",
-        ok: "rgb(var(--ok) / <alpha-value>)",
-        danger: "rgb(var(--danger) / <alpha-value>)",
+        paper: c("paper"), panel: c("panel"), elevated: c("elevated"), ink: c("ink"), muted: c("muted"),
+        line: c("line"), brand: c("brand"), "on-brand": c("on-brand"), info: c("info"), ai: c("ai"),
+        ok: c("ok"), warn: c("warn"), danger: c("danger"),
       },
       fontFamily: {
-        sans: ["ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
+        sans: ["Inter Variable", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
       },
+      borderRadius: { sm: "var(--radius-sm)", md: "var(--radius-md)", lg: "var(--radius-lg)" },
+      boxShadow: { sm: "var(--shadow-sm)", md: "var(--shadow-md)", lg: "var(--shadow-lg)" },
+      maxWidth: { container: "var(--container-max)" },
+      height: { header: "var(--header-h)" },
+      transitionTimingFunction: { app: "var(--ease)" },
+      transitionDuration: { fast: "150ms", DEFAULT: "200ms" },
     },
   },
   plugins: [],

@@ -1,0 +1,739 @@
+{
+ "articles": [
+  {
+   "slug": "kb-wifi-connected-no-internet",
+   "title": "Wi-Fi shows connected but pages will not load",
+   "category": "Network and Connectivity",
+   "problem_description": "The device reports it is connected to the wireless network but websites and apps do not load, or the status says no internet access.",
+   "steps": [
+    "Turn Wi-Fi off and on again, or toggle airplane mode.",
+    "Forget the network and reconnect, entering credentials again.",
+    "Renew the IP lease (Windows: ipconfig /release then /renew; macOS: renew DHCP lease in network settings).",
+    "Test another device on the same network to see whether the problem is specific to this device.",
+    "Restart the device and retest in a different location."
+   ],
+   "escalation": "Escalate to network operations if several devices in the same area fail.",
+   "tags": [
+    "wifi",
+    "wireless",
+    "no internet",
+    "dhcp"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-wifi-keeps-dropping",
+   "title": "Wi-Fi keeps disconnecting in one location",
+   "category": "Network and Connectivity",
+   "problem_description": "Wireless drops repeatedly in a particular building, room or residence while working elsewhere.",
+   "steps": [
+    "Record where and when the drops happen and which devices are affected.",
+    "Check whether the device roams between access points; forget and rejoin the network.",
+    "Update the wireless adapter driver or device operating system.",
+    "Test with a second device in the same spot.",
+    "If several people in the area report it, log the location and times for the network team."
+   ],
+   "escalation": "Repeated multi-user drops in one area indicate an access-point or coverage fault and need network operations.",
+   "tags": [
+    "wifi",
+    "intermittent",
+    "dropping",
+    "coverage",
+    "residence"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-vpn-will-not-connect",
+   "title": "VPN will not connect from off campus",
+   "category": "Network and Connectivity",
+   "problem_description": "The VPN client fails to connect, hangs on connecting, or disconnects soon after connecting.",
+   "steps": [
+    "Confirm ordinary internet access works without the VPN.",
+    "Check the VPN client is the current version and restart it.",
+    "Confirm the account is not locked and multi-factor prompts are being approved.",
+    "Try a different network (for example a mobile hotspot) to rule out a home-network block.",
+    "Note the exact error text and time before escalating."
+   ],
+   "escalation": "Escalate with the error text if it persists on a second network.",
+   "tags": [
+    "vpn",
+    "remote",
+    "off campus",
+    "connection"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-wired-port-not-working",
+   "title": "Wall network port has no connection",
+   "category": "Network and Connectivity",
+   "problem_description": "A device plugged into a wall jack gets no link or no network access.",
+   "steps": [
+    "Check both ends of the cable and try a different known-good cable.",
+    "Try another device on the same port, and the device on another port.",
+    "Check the link light on the network adapter.",
+    "Record the port label (printed on the wall plate) for the ticket.",
+    "Confirm the room is not affected by a wider outage."
+   ],
+   "escalation": "Dead port with a good cable and a working second device needs a network technician to check the switch port.",
+   "tags": [
+    "wired",
+    "ethernet",
+    "port",
+    "wall jack"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-slow-websites",
+   "title": "Websites are slow while the network seems connected",
+   "category": "Network and Connectivity",
+   "problem_description": "Pages load slowly or time out intermittently though the connection shows as active.",
+   "steps": [
+    "Test several different sites to see whether one site or everything is slow.",
+    "Flush the DNS cache (Windows: ipconfig /flushdns).",
+    "Try another browser and disable extensions temporarily.",
+    "Compare with another device on the same network.",
+    "Note the time and location in case it matches a wider network issue."
+   ],
+   "escalation": "Slow performance across many users points to a network or DNS service problem.",
+   "tags": [
+    "dns",
+    "slow",
+    "latency",
+    "browser"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-building-wide-outage",
+   "title": "Network down for a whole building or area",
+   "category": "Network and Connectivity",
+   "problem_description": "Several people in the same building or area report no network at the same time.",
+   "steps": [
+    "Collect reports and note the building, floor and start time.",
+    "Check the service status page or announcements for known incidents.",
+    "Confirm at least two different devices in different rooms are affected.",
+    "Link new tickets to the same incident rather than troubleshooting each device.",
+    "Escalate promptly with the list of affected locations."
+   ],
+   "escalation": "Escalate immediately to network operations as a major incident.",
+   "tags": [
+    "outage",
+    "incident",
+    "network down",
+    "building"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-account-locked",
+   "title": "Account locked after failed sign-ins",
+   "category": "Account and Authentication",
+   "problem_description": "A user cannot sign in because the account has been locked after repeated failed attempts.",
+   "steps": [
+    "Verify the user's identity using the approved verification procedure.",
+    "Check whether the lock is from failed attempts or a security hold.",
+    "If it is a standard lockout, unlock the account or wait for the lockout period to end.",
+    "Ask the user to update saved passwords on phones and other devices that may be retrying.",
+    "Record the unlock in the ticket."
+   ],
+   "escalation": "A lock caused by a security hold or suspicious activity goes to the security team.",
+   "tags": [
+    "account",
+    "locked",
+    "lockout",
+    "login"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-password-reset",
+   "title": "Forgotten password reset",
+   "category": "Account and Authentication",
+   "problem_description": "A user has forgotten their password and cannot sign in.",
+   "steps": [
+    "Direct the user to the self-service password reset if it is available to them.",
+    "If not, verify identity with the approved procedure before any reset.",
+    "Issue a temporary password through a secure channel and require a change at next sign-in.",
+    "Remind the user to update saved credentials on other devices.",
+    "Document the reset without recording the password."
+   ],
+   "escalation": "Unverifiable identity: do not reset; escalate to a supervisor.",
+   "tags": [
+    "password",
+    "reset",
+    "forgot",
+    "credentials"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-mfa-new-phone",
+   "title": "Multi-factor authentication on a new phone",
+   "category": "Account and Authentication",
+   "problem_description": "A user changed phone or lost their authenticator and cannot complete multi-factor sign-in.",
+   "steps": [
+    "Verify the user's identity using the approved procedure.",
+    "Remove or reset the old authentication method according to procedure.",
+    "Guide the user to register the authenticator app on the new phone.",
+    "Have the user test a sign-in before closing the ticket.",
+    "Suggest registering a backup method."
+   ],
+   "escalation": "Lost device with possible account exposure: involve the security team.",
+   "tags": [
+    "mfa",
+    "2fa",
+    "authenticator",
+    "phone"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-student-portal-sign-in",
+   "title": "Cannot sign in to a student portal",
+   "category": "Account and Authentication",
+   "problem_description": "A student cannot access the student portal although other services may work.",
+   "steps": [
+    "Confirm the username format and that caps lock is off.",
+    "Try a private browser window to rule out cached sign-in data.",
+    "Check whether the account is active and not locked.",
+    "Confirm whether the portal itself has a known outage.",
+    "Reset the password if verified and appropriate."
+   ],
+   "escalation": "Account active but portal access still denied: escalate to the application owner.",
+   "tags": [
+    "student",
+    "portal",
+    "login"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-m365-sign-in-failure",
+   "title": "Microsoft 365 sign-in failure",
+   "category": "Email and Collaboration",
+   "problem_description": "A user cannot sign in to Microsoft 365 apps such as email, Teams or Office.",
+   "steps": [
+    "Check the service health page for a known incident.",
+    "Confirm the account is active, unlocked and licensed.",
+    "Sign out of all Office apps, clear cached credentials and sign in again.",
+    "Try the web version in a private window.",
+    "If many users are affected, link to the incident."
+   ],
+   "escalation": "Multiple users failing at once is an incident: escalate to the collaboration platform team.",
+   "tags": [
+    "m365",
+    "office",
+    "sign in",
+    "outlook"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-mailbox-not-receiving",
+   "title": "Not receiving email or mailbox full",
+   "category": "Email and Collaboration",
+   "problem_description": "A user is not receiving messages or senders receive bounce messages.",
+   "steps": [
+    "Check mailbox storage and ask the user to clear space if full.",
+    "Look in junk and quarantine folders.",
+    "Check mail rules and forwarding for unexpected entries.",
+    "Ask the sender for the exact bounce message.",
+    "Check message trace for the sender and time."
+   ],
+   "escalation": "Unexpected forwarding rules may indicate compromise: involve the security team.",
+   "tags": [
+    "email",
+    "mailbox",
+    "bounce",
+    "quota"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-shared-calendar-mailbox",
+   "title": "Shared calendar or shared mailbox not appearing",
+   "category": "Email and Collaboration",
+   "problem_description": "A shared calendar or shared mailbox does not show up or does not sync.",
+   "steps": [
+    "Confirm the user has been granted access and when.",
+    "Allow time for permissions to propagate, then restart the mail client.",
+    "Remove and re-add the shared item.",
+    "Test in the web client to rule out client problems.",
+    "Re-apply the permission if it is missing."
+   ],
+   "escalation": "Permission changes need approval from the mailbox owner.",
+   "tags": [
+    "calendar",
+    "shared mailbox",
+    "sync",
+    "permissions"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-teams-audio-video",
+   "title": "Teams meeting audio or video problems",
+   "category": "Email and Collaboration",
+   "problem_description": "Microphone, speakers or camera do not work in Teams meetings.",
+   "steps": [
+    "Check the correct devices are selected in Teams settings and run a test call.",
+    "Confirm the operating system has allowed Teams to use the microphone and camera.",
+    "Close other apps that may hold the device.",
+    "Update or restart Teams, then reboot if needed.",
+    "Try joining from the web client."
+   ],
+   "escalation": "Hardware fault on the device itself goes to hardware support.",
+   "tags": [
+    "teams",
+    "audio",
+    "video",
+    "meeting",
+    "microphone"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-printer-offline-or-error",
+   "title": "Printer offline, jammed or showing an error",
+   "category": "Hardware and Devices",
+   "problem_description": "A shared printer does not print, shows an error, or appears offline.",
+   "steps": [
+    "Check the printer panel for paper jams, empty trays or toner messages.",
+    "Power cycle the printer and wait for it to be ready.",
+    "On the computer, remove the stuck job from the print queue and retry.",
+    "Confirm the computer is using the correct printer entry.",
+    "Try a different computer to see whether the issue is the printer or the PC."
+   ],
+   "escalation": "Hardware error codes that persist need printer maintenance.",
+   "tags": [
+    "printer",
+    "offline",
+    "jam",
+    "print queue"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-printer-install",
+   "title": "Installing or adding a printer",
+   "category": "Hardware and Devices",
+   "problem_description": "A user cannot add a network printer or the installation fails.",
+   "steps": [
+    "Confirm the printer's network name or address.",
+    "Add the printer from system settings using the correct driver.",
+    "Check whether the user has permission to install printers.",
+    "Print a test page.",
+    "Record the printer name used."
+   ],
+   "escalation": "Driver deployment problems need desktop engineering.",
+   "tags": [
+    "printer",
+    "install",
+    "driver"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-laptop-battery-display",
+   "title": "Laptop battery not charging or screen problems",
+   "category": "Hardware and Devices",
+   "problem_description": "A laptop does not charge, drains quickly, or has a faulty display.",
+   "steps": [
+    "Try a known-good power adapter and outlet.",
+    "Remove external devices and check the charging port for debris.",
+    "Check power settings and battery health in the operating system.",
+    "Connect an external monitor to tell display faults from graphics faults.",
+    "Back up important data if hardware failure is likely."
+   ],
+   "escalation": "Confirmed battery or panel fault: arrange repair or a loaner device.",
+   "tags": [
+    "laptop",
+    "battery",
+    "screen",
+    "charging"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-keyboard-mouse-monitor",
+   "title": "Keyboard, mouse or monitor not responding",
+   "category": "Hardware and Devices",
+   "problem_description": "A peripheral does not respond or a monitor shows no signal.",
+   "steps": [
+    "Check cables are firmly connected at both ends.",
+    "Try a different USB port or cable.",
+    "Test the peripheral on another computer.",
+    "For a monitor, confirm the correct input source is selected.",
+    "Replace the peripheral if it fails on a second computer."
+   ],
+   "escalation": "Replacement stock is requested through the normal equipment process.",
+   "tags": [
+    "keyboard",
+    "mouse",
+    "monitor",
+    "peripheral",
+    "no signal"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-lab-workstation-boot",
+   "title": "Lab workstation will not start",
+   "category": "Hardware and Devices",
+   "problem_description": "A shared lab computer does not boot, hangs on start, or is unresponsive.",
+   "steps": [
+    "Check power cable and monitor connection.",
+    "Hold the power button to force off, wait, then start again.",
+    "Note any on-screen error or beep pattern.",
+    "Check whether other lab machines are affected.",
+    "Tag the machine as out of service if it cannot be fixed on the spot."
+   ],
+   "escalation": "Hardware faults or imaging failures go to desktop support.",
+   "tags": [
+    "lab",
+    "boot",
+    "workstation",
+    "computer"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-projector-no-image",
+   "title": "Classroom projector shows no image",
+   "category": "Classroom and AV Support",
+   "problem_description": "The projector does not respond, shows no image, or does not display the connected laptop.",
+   "steps": [
+    "Confirm the projector is powered and not in standby; use the room control panel.",
+    "Select the correct input source.",
+    "Check the cable from the laptop and try a different adapter.",
+    "Set the laptop to extend or duplicate the display.",
+    "Try the room's podium computer to separate laptop issues from projector issues."
+   ],
+   "escalation": "Lamp or hardware faults need AV technicians on site.",
+   "tags": [
+    "projector",
+    "display",
+    "classroom",
+    "hdmi"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-classroom-no-sound",
+   "title": "No sound in a classroom",
+   "category": "Classroom and AV Support",
+   "problem_description": "Speakers produce no sound during class presentations.",
+   "steps": [
+    "Check the room volume and that the system is not muted.",
+    "Confirm the audio source and output are selected correctly on the computer.",
+    "Check microphone and speaker cables and power.",
+    "Test with a different source.",
+    "Report the room number and what was tested."
+   ],
+   "escalation": "Persistent room audio failure needs an AV technician.",
+   "tags": [
+    "audio",
+    "sound",
+    "speakers",
+    "classroom"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-podium-computer-problems",
+   "title": "Podium computer frozen or laptop will not connect to screen",
+   "category": "Classroom and AV Support",
+   "problem_description": "The teaching station computer is frozen or cannot log in, or a laptop cannot be shown on the room screen.",
+   "steps": [
+    "Restart the podium computer if it is frozen and safe to do so.",
+    "Confirm the user's account can sign in elsewhere.",
+    "For laptops, check the cable, adapter and display input selection.",
+    "Use the room's guide for the input switcher.",
+    "Report the room and the symptoms."
+   ],
+   "escalation": "On-site AV or desktop support if a restart does not help.",
+   "tags": [
+    "podium",
+    "teaching station",
+    "laptop",
+    "classroom"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-lecture-capture-upload",
+   "title": "Lecture recording did not upload",
+   "category": "Classroom and AV Support",
+   "problem_description": "A lecture capture session finished but the recording is missing or stuck.",
+   "steps": [
+    "Check the schedule matched the room and time.",
+    "Check whether the recording shows as processing; allow time.",
+    "Confirm the capture device in the room was powered and online.",
+    "Record the course, room and time of the missing session.",
+    "Ask the instructor to check the recording library."
+   ],
+   "escalation": "Missing recordings need the lecture-capture administrator.",
+   "tags": [
+    "lecture capture",
+    "recording",
+    "upload"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-application-freezes",
+   "title": "Application freezes or crashes",
+   "category": "Software and Applications",
+   "problem_description": "An application hangs or closes unexpectedly on Windows or macOS.",
+   "steps": [
+    "Note the application, version and what the user was doing.",
+    "Restart the application and the computer.",
+    "Install pending updates for the application and operating system.",
+    "Test with a new user profile or after clearing application cache.",
+    "Check available disk space and memory."
+   ],
+   "escalation": "Reproducible crashes with an error log go to the software owner or vendor.",
+   "tags": [
+    "crash",
+    "freeze",
+    "application",
+    "windows",
+    "macos"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-license-expired",
+   "title": "Software says licence expired",
+   "category": "Software and Applications",
+   "problem_description": "An application reports an expired or missing licence.",
+   "steps": [
+    "Confirm the user is signed in with the correct work account.",
+    "Sign out and in again to refresh the licence.",
+    "Check the user is assigned the licence in the licensing portal.",
+    "Update the application to the current version.",
+    "Request a licence if none is assigned."
+   ],
+   "escalation": "Licence purchases need approval from the budget owner.",
+   "tags": [
+    "licence",
+    "license",
+    "expired",
+    "activation"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-os-update-fails",
+   "title": "Operating system update will not install",
+   "category": "Software and Applications",
+   "problem_description": "A system update fails, loops or stalls.",
+   "steps": [
+    "Check free storage and battery or power connection.",
+    "Restart and retry the update.",
+    "Check the update service or settings for an error code.",
+    "Disconnect nonessential peripherals.",
+    "Back up data before further repair attempts."
+   ],
+   "escalation": "Repeated failure with an error code may need a reinstall by desktop support.",
+   "tags": [
+    "update",
+    "os",
+    "ios",
+    "windows"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-website-error-in-browser",
+   "title": "Website error in one browser",
+   "category": "Software and Applications",
+   "problem_description": "A web application or course site fails in one browser but may work in another.",
+   "steps": [
+    "Try a private window and another browser.",
+    "Clear cache and cookies for the site.",
+    "Disable extensions such as ad blockers.",
+    "Update the browser.",
+    "Note the exact error message and URL."
+   ],
+   "escalation": "If it fails everywhere, report to the site owner.",
+   "tags": [
+    "browser",
+    "chrome",
+    "website",
+    "cache"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-report-phishing",
+   "title": "Suspicious or phishing email",
+   "category": "Security-Related Issues",
+   "problem_description": "A user received an email asking for a password or sign-in that looks suspicious, or clicked a link.",
+   "steps": [
+    "Tell the user not to click links or open attachments.",
+    "Ask whether they entered credentials or opened an attachment.",
+    "If credentials were entered, treat as a possible compromise and follow that article.",
+    "Report the message to the security team using the approved route.",
+    "Delete the message after it has been reported."
+   ],
+   "escalation": "Any entered credentials or opened attachment: escalate to security immediately.",
+   "tags": [
+    "phishing",
+    "suspicious email",
+    "scam"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-suspected-account-compromise",
+   "title": "Suspected account compromise",
+   "category": "Security-Related Issues",
+   "problem_description": "A user sees unknown sign-ins or believes their account was hacked.",
+   "steps": [
+    "Verify identity and confirm what activity looks unusual.",
+    "Reset the password and sign out all sessions per procedure.",
+    "Check mailbox rules and forwarding.",
+    "Confirm multi-factor methods are the user's own.",
+    "Notify the security team."
+   ],
+   "escalation": "Always involve the security team for confirmed or likely compromise.",
+   "tags": [
+    "compromise",
+    "hacked",
+    "unknown sign-in",
+    "security"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-lost-or-stolen-device",
+   "title": "Lost or stolen device with account access",
+   "category": "Security-Related Issues",
+   "problem_description": "A phone, laptop or tablet that can access work accounts is lost or stolen.",
+   "steps": [
+    "Record what the device was and what it could access.",
+    "Sign out sessions and reset the password as per procedure.",
+    "Start remote lock or wipe if the device is managed.",
+    "Report the loss to the security team.",
+    "Advise the user about reporting to campus security if appropriate."
+   ],
+   "escalation": "Escalate to security at once.",
+   "tags": [
+    "lost",
+    "stolen",
+    "device",
+    "wipe"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-suspected-malware",
+   "title": "Suspected malware or antivirus alert",
+   "category": "Security-Related Issues",
+   "problem_description": "Pop-ups, unusual slowness or an antivirus alert suggest malware.",
+   "steps": [
+    "Disconnect the device from the network if the risk is high.",
+    "Do not delete or ignore the alert; record its text.",
+    "Run a full antivirus scan using the managed tool.",
+    "Change passwords from a different clean device if credentials may be exposed.",
+    "Report to the security team."
+   ],
+   "escalation": "Escalate to security for confirmed detections.",
+   "tags": [
+    "malware",
+    "virus",
+    "antivirus",
+    "pop-ups"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  },
+  {
+   "slug": "kb-documents-shared-wrongly",
+   "title": "Documents shared with the wrong people",
+   "category": "Security-Related Issues",
+   "problem_description": "A file or folder was shared with unintended recipients.",
+   "steps": [
+    "Identify what was shared and with whom.",
+    "Remove the sharing links or permissions.",
+    "Check access logs if available.",
+    "Assess the sensitivity of the content.",
+    "Report to the security or privacy contact if sensitive data was exposed."
+   ],
+   "escalation": "Exposure of sensitive data must be reported to security or privacy.",
+   "tags": [
+    "sharing",
+    "permissions",
+    "data exposure"
+   ],
+   "source_type": "original_sample",
+   "source_note": "Original sample article written for the XSupport AI project. Generic troubleshooting guidance; not copied from or representing any university policy, system or knowledge base.",
+   "status": "approved"
+  }
+ ]
+}

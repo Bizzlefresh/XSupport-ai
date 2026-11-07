@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
+import { fmtDate } from "@/lib/format";
 import type { IntegrationStatus, User } from "@/types/api";
 
 function Flag({ on }: { on: boolean }) {
@@ -30,7 +31,18 @@ export default function SettingsPage() {
           <dl className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between"><dt>Synthetic data</dt><dd><Flag on={integrations.data.synthetic_data.enabled} /></dd></div>
             <div className="flex justify-between"><dt>TeamDynamix</dt><dd><Flag on={integrations.data.teamdynamix.enabled} /></dd></div>
-            <div className="flex justify-between"><dt>TeamDynamix mode</dt><dd>{integrations.data.teamdynamix.read_only ? "Read-only" : "Read-write"}</dd></div>
+            <div className="flex justify-between"><dt>TeamDynamix mode</dt><dd>{integrations.data.teamdynamix.read_only ? "Read-only" : "Read-write (not supported)"}</dd></div>
+            <div className="flex justify-between"><dt>TeamDynamix state</dt><dd className={integrations.data.teamdynamix.state === "ready" ? "text-ok" : integrations.data.teamdynamix.state === "disabled" ? "text-muted" : "text-danger"}>{integrations.data.teamdynamix.state}</dd></div>
+            {integrations.data.teamdynamix.reasons.length > 0 && (
+              <ul className="list-disc pl-5 text-xs text-danger">{integrations.data.teamdynamix.reasons.map((r) => <li key={r}>{r}</li>)}</ul>
+            )}
+            {integrations.data.teamdynamix.enabled && (
+              <p className="text-xs text-muted">
+                {integrations.data.teamdynamix.requests} requests, {integrations.data.teamdynamix.failures} failed
+                {integrations.data.teamdynamix.last_success_at ? ` · last success ${fmtDate(integrations.data.teamdynamix.last_success_at)}` : ""}
+                {integrations.data.teamdynamix.last_error_kind ? ` · last error: ${integrations.data.teamdynamix.last_error_kind}` : ""}
+              </p>
+            )}
             <div className="flex justify-between"><dt>External LLM</dt><dd><Flag on={integrations.data.external_llm.enabled} /></dd></div>
             <p className="pt-2 text-xs text-muted">{integrations.data.teamdynamix.note}</p>
           </dl>

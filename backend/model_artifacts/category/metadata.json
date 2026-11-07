@@ -1,0 +1,21 @@
+{
+ "name": "tfidf_logreg",
+ "version": "v1-9c985c19",
+ "labels": [
+  "Account and Authentication",
+  "Classroom and AV Support",
+  "Email and Collaboration",
+  "General IT Support",
+  "Hardware and Devices",
+  "Network and Connectivity",
+  "Security-Related Issues",
+  "Software and Applications"
+ ],
+ "confidence_threshold": 0.5,
+ "dataset_sha256": "9c985c19b08d8e35e2f9cfbb8cfa5caabbefba10c1ec6331f1c3ed06517063d0",
+ "scikit_learn": "1.9.1",
+ "trained_at": "2026-11-05T17:31:16.123129+00:00",
+ "params": {
+  "C": 30.0
+ }
+}

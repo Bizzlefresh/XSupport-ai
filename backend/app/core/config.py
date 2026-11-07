@@ -24,7 +24,19 @@ class Settings(BaseSettings):
     teamdynamix_base_url: str = ""
     teamdynamix_app_id: str = ""
     teamdynamix_token: str = Field(default="", repr=False)
+    teamdynamix_timeout_seconds: float = 15.0
+    teamdynamix_max_retries: int = 3
+    teamdynamix_backoff_base_seconds: float = 0.5
+    teamdynamix_rate_limit_calls: int = 60
+    teamdynamix_rate_limit_period_seconds: float = 60.0
+    teamdynamix_page_size: int = 50
+    teamdynamix_import_max: int = 200
+    teamdynamix_include_people: bool = False  # names of requestors/assignees are dropped unless explicitly enabled
     external_llm_enabled: bool = False
+
+    # Retrieval: auto = sentence-transformers if installed and loadable, otherwise local LSA.
+    embedding_provider: str = "auto"  # auto | sentence_transformers | lsa
+    embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
 
     @property
     def cors_origin_list(self) -> list[str]:

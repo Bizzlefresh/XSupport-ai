@@ -1,0 +1,110 @@
+{
+ "note": "Author-assigned labels mapping each synthetic scenario family to the sample article(s) that would help resolve it. Families with no entry intentionally have no matching article. These labels were written by the project author (an AI assistant) and should be reviewed by a human before the numbers are quoted as an evaluation result.",
+ "family_to_articles": {
+  "acc_locked": [
+   "kb-account-locked"
+  ],
+  "acc_mfa_setup": [
+   "kb-mfa-new-phone"
+  ],
+  "acc_password_reset": [
+   "kb-password-reset"
+  ],
+  "acc_student_portal": [
+   "kb-student-portal-sign-in"
+  ],
+  "amb_email_phish_click": [
+   "kb-report-phishing"
+  ],
+  "amb_projector_laptop": [
+   "kb-projector-no-image"
+  ],
+  "av_laptop_connect": [
+   "kb-podium-computer-problems"
+  ],
+  "av_lecture_capture": [
+   "kb-lecture-capture-upload"
+  ],
+  "av_no_sound": [
+   "kb-classroom-no-sound"
+  ],
+  "av_podium_pc": [
+   "kb-podium-computer-problems"
+  ],
+  "av_projector_dead": [
+   "kb-projector-no-image"
+  ],
+  "hw_lab_workstation": [
+   "kb-lab-workstation-boot"
+  ],
+  "hw_laptop_battery_screen": [
+   "kb-laptop-battery-display"
+  ],
+  "hw_peripherals": [
+   "kb-keyboard-mouse-monitor"
+  ],
+  "hw_printer_install": [
+   "kb-printer-install"
+  ],
+  "hw_printer_jam_offline": [
+   "kb-printer-offline-or-error"
+  ],
+  "mail_m365_login": [
+   "kb-m365-sign-in-failure"
+  ],
+  "mail_not_receiving": [
+   "kb-mailbox-not-receiving"
+  ],
+  "mail_shared_calendar": [
+   "kb-shared-calendar-mailbox"
+  ],
+  "mail_teams_meeting": [
+   "kb-teams-audio-video"
+  ],
+  "net_building_outage": [
+   "kb-building-wide-outage"
+  ],
+  "net_dns_slow": [
+   "kb-slow-websites"
+  ],
+  "net_vpn_failure": [
+   "kb-vpn-will-not-connect"
+  ],
+  "net_wifi_cannot_connect": [
+   "kb-wifi-connected-no-internet"
+  ],
+  "net_wifi_residence_intermittent": [
+   "kb-wifi-keeps-dropping"
+  ],
+  "net_wired_port_dead": [
+   "kb-wired-port-not-working"
+  ],
+  "sec_compromised_account": [
+   "kb-suspected-account-compromise"
+  ],
+  "sec_data_sharing": [
+   "kb-documents-shared-wrongly"
+  ],
+  "sec_lost_device": [
+   "kb-lost-or-stolen-device"
+  ],
+  "sec_malware": [
+   "kb-suspected-malware"
+  ],
+  "sec_phishing": [
+   "kb-report-phishing"
+  ],
+  "sw_browser_site": [
+   "kb-website-error-in-browser"
+  ],
+  "sw_crash": [
+   "kb-application-freezes"
+  ],
+  "sw_license_expired": [
+   "kb-license-expired"
+  ],
+  "sw_os_update_fail": [
+   "kb-os-update-fails"
+  ]
+ }
+}
