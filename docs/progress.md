@@ -176,3 +176,18 @@ Frontend tests, end-to-end checks, security review, final documentation and demo
 - Executed: `tsc --noEmit` clean; `next build` passes; rendered real pages (seeded synthetic data) with Playwright at 375/768/1024/1440 (light) and 375/1440 (dark) for Dashboard and Tickets: no horizontal overflow, no console errors.
 - Executed interaction checks (Playwright, 11 passed): palette opens with Ctrl+K and finds tickets, Enter navigates, Esc closes, theme switch persists across reload, sidebar collapse persists with tooltip, mobile drawer opens/closes, sign-out returns to login.
 - Not done: no ESLint config exists yet; no automated frontend test suite committed (the checks above were ad hoc scripts); Lighthouse not run; page bodies (dashboard, tickets, etc.) still use their old layouts.
+
+## UI redesign – Phase 3 (Dashboard) — code written, NOT yet verified
+- Done (code only): new dashboard (`frontend/src/app/(app)/dashboard/page.tsx`) with page header, trend window and New ticket action;
+  six KPI cards with icons; created-vs-resolved area chart; status and priority distribution (counts always printed, links to filtered lists);
+  recent tickets (`GET /tickets?sort=created_at&desc=true&page_size=6`); AI review queue (counts from `/analytics/insights` → `ai_use.category_review`,
+  amber AI styling); possible recurring incidents (burst rule + repeated subjects from `/analytics/insights`); category bar chart; recent activity timeline;
+  API/database health line. Loading skeletons, error-with-retry and empty states for each panel.
+- Equal KPI heights: `StatCard` is now `h-full flex-col` with a reserved hint row; it also uses Next `Link` instead of `<a>` (no full reload).
+- Tickets page now reads `?q=` from the URL (needed by the dashboard's repeated-subject links).
+- Only existing endpoints are used; no backend change. Limitation: the backend exposes review-queue counts only, not a list of pending
+  suggestions, so the queue panel cannot list tickets. A list would need a new read endpoint.
+- **Executed (2026-11-09):** `npm ci`, `npm run typecheck` and `npm run build` inside `node:22-alpine` (Docker): typecheck clean, build succeeded
+  (13 routes; `/dashboard` 14.9 kB, 257 kB first load).
+- **Not run:** renders at 375/768/1024/1440 light/dark. `docker compose up --build db backend` failed while installing backend
+  dependencies because the host disk filled (under 0.5 GB free); Docker's VM filesystem went read-only. `docker compose up` remains unverified.

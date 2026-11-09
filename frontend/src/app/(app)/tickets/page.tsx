@@ -19,8 +19,8 @@ const PAGE_SIZE = 25;
 const initial = (k: string) => (typeof window === "undefined" ? "" : new URLSearchParams(window.location.search).get(k) ?? "");
 
 export default function TicketsPage() {
-  const [q, setQ] = useState("");
-  const [debounced, setDebounced] = useState("");
+  const [q, setQ] = useState(() => initial("q"));
+  const [debounced, setDebounced] = useState(() => initial("q"));
   const [status, setStatus] = useState(() => initial("status"));
   const [priority, setPriority] = useState(() => initial("priority"));
   const [category, setCategory] = useState("");

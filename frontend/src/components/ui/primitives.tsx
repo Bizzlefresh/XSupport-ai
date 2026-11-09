@@ -1,4 +1,5 @@
 import { AlertTriangle, Inbox, type LucideIcon } from "lucide-react";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -55,16 +56,18 @@ export function StatCard({ label, value, hint, icon: Icon, href, loading, tone =
   const toneCls = { brand: "bg-brand/10 text-brand", ok: "bg-ok/10 text-ok", warn: "bg-warn/10 text-warn", danger: "bg-danger/10 text-danger", info: "bg-info/10 text-info" }[tone];
   const body = (
     <>
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-3">
         <p className="text-sm text-muted">{label}</p>
-        <span className={cn("rounded-md p-2", toneCls)}><Icon aria-hidden className="h-4 w-4" /></span>
+        <span className={cn("shrink-0 rounded-md p-2", toneCls)}><Icon aria-hidden className="h-4 w-4" /></span>
       </div>
       {loading ? <Skeleton className="mt-3 h-8 w-20" /> : <p className="tabular mt-2 text-3xl font-semibold tracking-tight">{value}</p>}
-      {hint && !loading && <p className="mt-1 text-xs text-muted">{hint}</p>}
+      {/* Hint row always reserves a line so every card in a grid row ends at the same height. */}
+      <p className="mt-auto min-h-[1rem] pt-1 text-xs leading-4 text-muted">{!loading && hint ? hint : "\u00a0"}</p>
     </>
   );
-  const cls = "block rounded-lg border border-line bg-panel p-4 shadow-sm transition-[box-shadow,transform,border-color] duration-fast ease-app";
+  // h-full + flex-col: cards stretch to the tallest card in their grid row.
+  const cls = "flex h-full flex-col rounded-lg border border-line bg-panel p-4 shadow-sm transition-[box-shadow,transform,border-color] duration-fast ease-app";
   return href
-    ? <a href={href} className={cn(cls, "hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md")}>{body}</a>
+    ? <Link href={href} className={cn(cls, "hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md focus-visible:border-brand")}>{body}</Link>
     : <div className={cls}>{body}</div>;
 }
