@@ -11,3 +11,6 @@ frontend/next-env.d.ts
 *.tsbuildinfo
 models/artifacts/
 *.egg-info/
+
+# Playwright output
+frontend/e2e-artifacts/

@@ -2,9 +2,9 @@
 
 ## Not verified
 - UI was built and type-checked but not clicked through in a browser by the author.
-- Docker and PostgreSQL were not run in the build environment (tests use SQLite).
+- Backend tests use SQLite. Docker Compose with PostgreSQL was run once (2026-11-09): migrations, seed and the dashboard work; the backend test suite has not been run against PostgreSQL locally.
 - Optional sentence-transformers embeddings and a sentence-embedding classifier were never run.
-- Frontend has no automated tests.
+- Frontend tests cover only the dashboard so far (Playwright, `frontend/e2e`).
 
 ## TeamDynamix
 - Authorization for StFX TeamDynamix was **not granted** (security reasons). No connection was made.

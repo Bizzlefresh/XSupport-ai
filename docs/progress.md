@@ -177,17 +177,27 @@ Frontend tests, end-to-end checks, security review, final documentation and demo
 - Executed interaction checks (Playwright, 11 passed): palette opens with Ctrl+K and finds tickets, Enter navigates, Esc closes, theme switch persists across reload, sidebar collapse persists with tooltip, mobile drawer opens/closes, sign-out returns to login.
 - Not done: no ESLint config exists yet; no automated frontend test suite committed (the checks above were ad hoc scripts); Lighthouse not run; page bodies (dashboard, tickets, etc.) still use their old layouts.
 
-## UI redesign – Phase 3 (Dashboard) — code written, NOT yet verified
-- Done (code only): new dashboard (`frontend/src/app/(app)/dashboard/page.tsx`) with page header, trend window and New ticket action;
-  six KPI cards with icons; created-vs-resolved area chart; status and priority distribution (counts always printed, links to filtered lists);
-  recent tickets (`GET /tickets?sort=created_at&desc=true&page_size=6`); AI review queue (counts from `/analytics/insights` → `ai_use.category_review`,
-  amber AI styling); possible recurring incidents (burst rule + repeated subjects from `/analytics/insights`); category bar chart; recent activity timeline;
-  API/database health line. Loading skeletons, error-with-retry and empty states for each panel.
-- Equal KPI heights: `StatCard` is now `h-full flex-col` with a reserved hint row; it also uses Next `Link` instead of `<a>` (no full reload).
-- Tickets page now reads `?q=` from the URL (needed by the dashboard's repeated-subject links).
-- Only existing endpoints are used; no backend change. Limitation: the backend exposes review-queue counts only, not a list of pending
-  suggestions, so the queue panel cannot list tickets. A list would need a new read endpoint.
-- **Executed (2026-11-09):** `npm ci`, `npm run typecheck` and `npm run build` inside `node:22-alpine` (Docker): typecheck clean, build succeeded
-  (13 routes; `/dashboard` 14.9 kB, 257 kB first load).
-- **Not run:** renders at 375/768/1024/1440 light/dark. `docker compose up --build db backend` failed while installing backend
-  dependencies because the host disk filled (under 0.5 GB free); Docker's VM filesystem went read-only. `docker compose up` remains unverified.
+## UI redesign – Phase 3 (Dashboard) (complete)
+- Dashboard (`frontend/src/app/(app)/dashboard/page.tsx`): header with trend window and New ticket; six KPI cards with icons and equal heights;
+  created-vs-resolved area chart; status and priority distribution (counts printed, links to filtered lists); recent tickets
+  (`GET /tickets?sort=created_at&desc=true&page_size=6`); AI review queue (counts from `/analytics/insights` → `ai_use.category_review`, amber AI styling);
+  possible recurring incidents (burst rule + repeated subjects, labelled "look at this", not a confirmed incident); recent activity (latest 6);
+  tickets by category as labelled HTML bars linking to the filtered list; API/database health. Skeleton, error-with-retry and empty states per panel.
+- `StatCard` is `h-full flex-col` with a reserved hint row, and uses Next `Link`. Tickets page reads `?q=` and `?category_id=` from the URL.
+- Panels go side by side from 1280 px (`xl`); at 1024 px the side column was too narrow and truncated legend labels, so it now stacks.
+- Chart animation is off when the user prefers reduced motion.
+- Only existing endpoints are used; no backend change. Limitation: the backend gives review-queue counts only, not a list of pending suggestions.
+
+**Executed (2026-11-09)**
+- `npm ci`, `npm run typecheck` (clean) and `npm run build` (succeeded) in `node:22-alpine`; the frontend image build runs `next build` again.
+- `docker compose up -d --build` (PostgreSQL 16 + pgvector, backend, frontend): all three containers start, `alembic upgrade head` reaches `0005`
+  on PostgreSQL, `/api/health` reports ok/connected, seed loads 383 synthetic tickets and 32 articles. First run of Docker/PostgreSQL in this environment.
+- First committed frontend test: `frontend/e2e/dashboard.spec.ts` (Playwright 1.64.1, run in `mcr.microsoft.com/playwright:v1.64.1-noble` against
+  the compose stack). It logs in, renders the dashboard at 375/768/1024/1440 in light and dark, and asserts real data loaded, KPI cards in a row
+  have equal height (within 1 px), no horizontal overflow, no console errors. **8 passed.** Screenshots were inspected by eye at all four widths.
+- Run: `E2E_PASSWORD=<seeded tech password> npx playwright test` (from `frontend/`, stack running).
+
+**Not done**
+- No ESLint config. Only the dashboard has e2e coverage; tickets, AI panels and knowledge workflows still need tests (Phases 4-7).
+- The AI review queue was only seen in its empty state (seeded data has no stored suggestions); the populated state is not rendered yet.
+- Lighthouse and screen-reader checks not run.

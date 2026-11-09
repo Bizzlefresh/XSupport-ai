@@ -23,7 +23,7 @@ export default function TicketsPage() {
   const [debounced, setDebounced] = useState(() => initial("q"));
   const [status, setStatus] = useState(() => initial("status"));
   const [priority, setPriority] = useState(() => initial("priority"));
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(() => initial("category_id"));
   const [unassigned, setUnassigned] = useState(false);
   const [sort, setSort] = useState("created_at");
   const [page, setPage] = useState(1);

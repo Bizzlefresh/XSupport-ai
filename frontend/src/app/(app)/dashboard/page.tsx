@@ -7,12 +7,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { useState } from "react";
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useEffect, useState } from "react";
+import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { PriorityBadge, StatusBadge } from "@/components/badges";
 import { EmptyState, ErrorState, PageHeader, Skeleton, StatCard } from "@/components/ui/primitives";
 import { Select } from "@/components/ui/select";
+import { useCategories } from "@/features/tickets/hooks";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { fmtDate, fmtHours, label, PRIORITIES, STATUSES } from "@/lib/format";
@@ -25,6 +26,19 @@ const tip = { background: "rgb(var(--elevated))", border: "1px solid rgb(var(--l
 
 const STATUS_BAR: Record<string, string> = { new: "bg-brand", open: "bg-info", pending: "bg-warn", resolved: "bg-ok", closed: "bg-muted" };
 const PRIORITY_BAR: Record<string, string> = { critical: "bg-danger", high: "bg-warn", medium: "bg-info", low: "bg-muted" };
+
+/** Chart animation is skipped when the user prefers reduced motion. */
+function useReducedMotion() {
+  const [reduce, setReduce] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduce(mq.matches);
+    const on = (e: MediaQueryListEvent) => setReduce(e.matches);
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
+  return reduce;
+}
 
 function Panel({ title, icon: Icon, action, children, className, id, note }: {
   title: string; icon: typeof Inbox; action?: ReactNode; children: ReactNode; className?: string; id: string; note?: string;
@@ -100,6 +114,8 @@ export default function DashboardPage() {
     queryKey: ["tickets", "dashboard-recent"],
     queryFn: () => api<TicketPage>("/tickets?sort=created_at&desc=true&page=1&page_size=6"),
   });
+  const categories = useCategories();
+  const reduceMotion = useReducedMotion();
   const health = useQuery({ queryKey: ["health"], queryFn: () => api<Health>("/health"), refetchInterval: 30_000 });
 
   const d = o.data;
@@ -140,7 +156,7 @@ export default function DashboardPage() {
 
       {/* KPI cards: grid rows stretch, StatCard is h-full, so every card in a row has the same height. */}
       {!o.isError && (
-        <section aria-label="Summary" className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
+        <section aria-label="Summary" className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
           <StatCard label="Total tickets" icon={TicketIcon} loading={loading} value={d?.totals.total} href="/tickets" hint="All statuses" />
           <StatCard label="Open" icon={Inbox} tone="info" loading={loading} value={d?.totals.open} href="/tickets?status=open" hint="New and open" />
           <StatCard label="Pending" icon={Clock} tone="warn" loading={loading} value={d?.totals.pending} href="/tickets?status=pending" hint="Waiting on someone" />
@@ -153,8 +169,8 @@ export default function DashboardPage() {
       )}
 
       {!o.isError && (
-        <div className="grid gap-6 lg:grid-cols-3">
-          <Panel id="trend" title="Created vs resolved per day" icon={ActivityIcon} className="lg:col-span-2">
+        <div className="grid gap-6 xl:grid-cols-3">
+          <Panel id="trend" title="Created vs resolved per day" icon={ActivityIcon} className="xl:col-span-2">
             {loading || !d ? <Skeleton className="h-64" /> : (
               <div className="h-64" role="img" aria-label={`Area chart of tickets created and resolved per day over the last ${days} days`}>
                 <ResponsiveContainer>
@@ -170,8 +186,8 @@ export default function DashboardPage() {
                     <YAxis tick={tick} allowDecimals={false} width={36} tickLine={false} axisLine={false} />
                     <Tooltip contentStyle={tip} />
                     <Legend wrapperStyle={{ fontSize: 12 }} />
-                    <Area type="monotone" dataKey="created" name="Created" stroke="rgb(var(--brand))" strokeWidth={2} fill="url(#gCreated)" />
-                    <Area type="monotone" dataKey="resolved" name="Resolved" stroke="rgb(var(--ok))" strokeWidth={2} strokeDasharray="5 3" fill="none" />
+                    <Area type="monotone" dataKey="created" name="Created" isAnimationActive={!reduceMotion} stroke="rgb(var(--brand))" strokeWidth={2} fill="url(#gCreated)" />
+                    <Area type="monotone" dataKey="resolved" name="Resolved" isAnimationActive={!reduceMotion} stroke="rgb(var(--ok))" strokeWidth={2} strokeDasharray="5 3" fill="none" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -197,8 +213,8 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <Panel id="recent" title="Recent tickets" icon={TicketIcon} className="lg:col-span-2" action={<ViewAll href="/tickets" />}>
+      <div className="grid gap-6 xl:grid-cols-3">
+        <Panel id="recent" title="Recent tickets" icon={TicketIcon} className="xl:col-span-2" action={<ViewAll href="/tickets" />}>
           {recent.isLoading ? <ListSkeleton rows={6} /> : recent.isError ? (
             <ErrorState message={(recent.error as Error).message} onRetry={() => recent.refetch()} />
           ) : recent.data && recent.data.items.length === 0 ? (
@@ -261,15 +277,15 @@ export default function DashboardPage() {
         </Panel>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <Panel id="inc" title="Possible recurring incidents" icon={Repeat} action={<ViewAll href="/analytics#inc" />}
+      <div className="grid gap-6 xl:grid-cols-3">
+        <Panel id="inc" title="Possible recurring incidents" icon={Repeat} className="xl:col-span-2" action={<ViewAll href="/analytics#inc" />}
           note={ins.data ? `Rule: ${ins.data.incident_bursts.rule}. A flag means "look at this", not a confirmed incident; a person decides.` : undefined}>
           {ins.isLoading ? <ListSkeleton rows={4} /> : ins.isError ? (
             <ErrorState message={(ins.error as Error).message} onRetry={() => ins.refetch()} />
           ) : bursts.length === 0 && recurring.length === 0 ? (
             <EmptyState icon={Repeat} title="Nothing flagged" description="No ticket bursts or repeated subjects were found." />
           ) : (
-            <div className="space-y-5">
+            <div className="grid gap-6 sm:grid-cols-2">
               {bursts.length > 0 && (
                 <div>
                   <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">Ticket bursts ({bursts.length})</h3>
@@ -302,26 +318,10 @@ export default function DashboardPage() {
           )}
         </Panel>
 
-        <Panel id="cat" title="Tickets by category" icon={ListTodo} note="All tickets, any date.">
-          {loading || !d ? <Skeleton className="h-72" /> : d.by_category.length === 0 ? <EmptyState title="No categories yet" /> : (
-            <div style={{ height: Math.max(220, d.by_category.length * 30) }} role="img" aria-label="Bar chart of ticket counts by category">
-              <ResponsiveContainer>
-                <BarChart data={d.by_category} layout="vertical" margin={{ left: 0, right: 12, top: 0, bottom: 0 }}>
-                  <CartesianGrid stroke={grid} horizontal={false} />
-                  <XAxis type="number" tick={tick} allowDecimals={false} tickLine={false} axisLine={false} />
-                  <YAxis type="category" dataKey="name" tick={tick} width={120} tickLine={false} axisLine={false} interval={0} />
-                  <Tooltip contentStyle={tip} cursor={{ fill: "rgb(var(--line) / 0.4)" }} />
-                  <Bar dataKey="count" name="Tickets" fill="rgb(var(--brand))" radius={[0, 4, 4, 0]} barSize={16} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          )}
-        </Panel>
-
         <Panel id="act" title="Recent activity" icon={ActivityIcon}>
           {loading || !d ? <ListSkeleton rows={5} /> : d.recent_activity.length === 0 ? <EmptyState title="No activity yet" /> : (
             <ol className="relative space-y-4 border-l border-line pl-4">
-              {d.recent_activity.map((a, i) => (
+              {d.recent_activity.slice(0, 6).map((a, i) => (
                 <li key={i} className="relative text-sm">
                   <span aria-hidden className={cn("absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-panel",
                     a.kind === "ai" ? "bg-ai" : "bg-brand")} />
@@ -337,6 +337,35 @@ export default function DashboardPage() {
           )}
         </Panel>
       </div>
+
+      <Panel id="cat" title="Tickets by category" icon={ListTodo} note="All tickets, any date. Select a category to see its tickets.">
+        {loading || !d ? <ListSkeleton rows={4} /> : d.by_category.length === 0 ? <EmptyState title="No categories yet" /> : (
+          <ul className="grid gap-x-8 gap-y-3 md:grid-cols-2" aria-label="Ticket counts by category">
+            {(() => {
+              const max = Math.max(...d.by_category.map((c) => c.count), 1);
+              return d.by_category.map((c) => {
+                const id = categories.data?.find((x) => x.name === c.name)?.id;
+                const row = (
+                  <>
+                    <span className="flex items-baseline justify-between gap-3 text-sm">
+                      <span className="truncate">{c.name}</span><span className="tabular shrink-0 font-medium">{c.count}</span>
+                    </span>
+                    <span aria-hidden className="mt-1.5 block h-2 overflow-hidden rounded-full bg-line/60">
+                      <span className="block h-full rounded-full bg-brand" style={{ width: `${(c.count / max) * 100}%` }} />
+                    </span>
+                  </>
+                );
+                return (
+                  <li key={c.name}>
+                    {id ? <Link href={`/tickets?category_id=${id}`} className="-mx-2 block rounded-md px-2 py-1 hover:bg-paper">{row}</Link>
+                        : <div className="py-1">{row}</div>}
+                  </li>
+                );
+              });
+            })()}
+          </ul>
+        )}
+      </Panel>
 
       <p className="flex items-center gap-2 text-xs text-muted">
         <span aria-hidden className={cn("h-2 w-2 rounded-full",

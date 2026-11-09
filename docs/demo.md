@@ -1,6 +1,6 @@
 # Demo script (about 10 minutes, synthetic data only)
 
-Start: `docker compose up --build`, then `docker compose exec backend python scripts/seed_database.py`.
+Start: `docker compose up --build`, then `docker compose exec backend python ../scripts/seed_database.py`.
 Sign in with a seeded admin account (see README).
 
 1. **Tickets** – open the list, filter by status and category. Everything shown is synthetic.
