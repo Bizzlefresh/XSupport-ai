@@ -195,9 +195,45 @@ Frontend tests, end-to-end checks, security review, final documentation and demo
 - First committed frontend test: `frontend/e2e/dashboard.spec.ts` (Playwright 1.64.1, run in `mcr.microsoft.com/playwright:v1.64.1-noble` against
   the compose stack). It logs in, renders the dashboard at 375/768/1024/1440 in light and dark, and asserts real data loaded, KPI cards in a row
   have equal height (within 1 px), no horizontal overflow, no console errors. **8 passed.** Screenshots were inspected by eye at all four widths.
-- Run: `E2E_PASSWORD=<seeded tech password> npx playwright test` (from `frontend/`, stack running).
+- Run: `scripts/e2e.sh` (added in UI Phase 4; isolated stack).
 
 **Not done**
-- No ESLint config. Only the dashboard has e2e coverage; tickets, AI panels and knowledge workflows still need tests (Phases 4-7).
+- No ESLint config. AI panels and knowledge workflows still need e2e tests (Phases 5-7).
 - The AI review queue was only seen in its empty state (seeded data has no stored suggestions); the populated state is not rendered yet.
 - Lighthouse and screen-reader checks not run.
+
+## UI redesign – Phase 4 (Tickets list and details) (complete)
+**List** (`tickets/page.tsx`): page header; filter bar with search (icon), status, priority, category, assignee (anyone / unassigned / person)
+and sort; removable filter chips and Clear; all filters, sort and page kept in the URL (bookmark, share, Back). Sortable column headers
+(`aria-sort`), whole-row click target with one tab stop, assignee initials, relative times with the full date on hover, "Showing x–y of n",
+skeleton, empty-with-clear and error-with-retry states. Cards below 1024 px, table from 1024 px; assignee column from 1280 px.
+**Detail** (`tickets/[id]/page.tsx`): ticket number, source, badges and times in the header; "Ticket details" card holding the
+technician-approved fields, with per-field saving indicator and success/error toasts; resolving or closing without a resolution summary
+asks for confirmation; description; resolution summary with Discard; activity timeline with kind icons (AI events in amber) and a note
+composer (Ctrl/Cmd+Enter). All AI panels moved to a separate, labelled "AI assistance" column with a note that confidence is an estimate,
+not a guarantee; on narrow screens a header link jumps to it. Loading skeleton; 404 shows "Ticket not found".
+**New ticket**: page header, back link, form in a card. Breadcrumb shows ticket numbers as XS-00042.
+
+**Bugs found and fixed**
+- Backend: priority and status sorted by stored value. On PostgreSQL "priority, descending" put *low* first (enum order); SQLite sorts the
+  text alphabetically. Now an explicit rank (most urgent first; status in workflow order). Test added.
+- Backend: search did not match the displayed ticket number (XS-00042 is derived from the id; search only checked `external_id`), in the list
+  and the Ctrl+K palette. Now accepts XS-00042, XS42 or digits, alongside text matches. Test added.
+- Frontend: a note and a field change saved at the same moment could leave the screen showing the older state (each response is a full
+  snapshot; the slower one won). The ticket is now refetched after every save. Regression test added.
+- Frontend: 404s were retried three times with backoff (~7 s of skeleton). Client errors (4xx) are no longer retried.
+- At 768 px with the sidebar open the table's fixed columns left no width for Subject (it vanished); found by the render test.
+
+**Executed (2026-11-10)**
+- Backend `pytest`: **149 passed** (147 + 2 new); `ruff` clean (in `python:3.12-slim`).
+- `npm run typecheck` clean; `npm run build` succeeded.
+- `scripts/e2e.sh` (new): throwaway Compose project `xsupport-e2e` on ports 3001/8001 with its own volume, seeded, removed afterwards.
+  **20 passed**: dashboard (8), tickets list + detail rendering at 375/768/1024/1440 in light and dark (8; no overflow, no console errors),
+  search/filter/sort/URL workflow, create → assign → note → resolve-with-confirmation, concurrent note + field change, ticket not found.
+  Workflow tests also passed 3 times in a row (`--repeat-each=3`, 12/12). Screenshots inspected by eye.
+- Earlier runs against the demo stack had created 13 "E2E … ticket" rows in the demo database; they were deleted (cascade), leaving the
+  383 seeded tickets. The isolated runner prevents this from now on.
+
+**Not done**
+- AI panels themselves are not restyled (Phase 5); they keep their old internals inside the new column.
+- No bulk actions, saved views or keyboard row navigation. No ESLint config. Lighthouse and screen-reader checks not run.

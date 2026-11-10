@@ -1,0 +1,14 @@
+# Overrides for the end-to-end test stack (scripts/e2e.sh). Used as a separate Compose project
+# ("xsupport-e2e") so it gets its own database volume and never writes to the demo database.
+services:
+  backend:
+    ports: !override
+      - "8001:8000"
+    environment:
+      CORS_ORIGINS: http://localhost:3001
+  frontend:
+    build:
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8001
+    ports: !override
+      - "3001:3000"

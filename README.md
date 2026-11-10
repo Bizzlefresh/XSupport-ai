@@ -61,6 +61,14 @@ cd backend && ruff check . && pytest -q
 cd frontend && npm run typecheck && npm run build
 ```
 
+End-to-end tests (Playwright, `frontend/e2e`) run against a throwaway Docker stack on ports 3001/8001 with its own
+database, seeded and deleted afterwards, so the demo data is never changed. Needs Docker and `SEED_TECH_PASSWORD` in `.env`:
+
+```bash
+scripts/e2e.sh                 # all tests; screenshots land in frontend/e2e-artifacts/
+scripts/e2e.sh -g workflows    # extra arguments go to `playwright test`
+```
+
 CI (`.github/workflows/ci.yml`) also runs migrations up/down/up against PostgreSQL.
 
 ## Layout

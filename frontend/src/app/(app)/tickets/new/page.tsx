@@ -1,11 +1,14 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PageHeader } from "@/components/ui/primitives";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useAssignees, useCategories } from "@/features/tickets/hooks";
@@ -39,8 +42,12 @@ export default function NewTicketPage() {
   const submit = (e: FormEvent) => { e.preventDefault(); create.mutate(); };
 
   return (
-    <form onSubmit={submit} className="max-w-2xl space-y-5">
-      <h1 className="text-2xl font-semibold">New ticket</h1>
+    <div className="max-w-3xl">
+    <Link href="/tickets" className="inline-flex items-center gap-1 rounded text-sm text-muted hover:text-ink">
+      <ArrowLeft aria-hidden className="h-4 w-4" />Tickets
+    </Link>
+    <div className="mt-3"><PageHeader title="New ticket" description="Category and priority are optional here; a technician can set them later, and AI category suggestions are offered on the ticket page." /></div>
+    <form onSubmit={submit} aria-label="New ticket" className="space-y-5 rounded-lg border border-line bg-panel p-5 shadow-sm sm:p-6">
       <div><label htmlFor="subject" className="mb-1 block text-sm font-medium">Subject</label>
         <Input id="subject" required maxLength={300} value={f.subject} onChange={set("subject")} /></div>
       <div><label htmlFor="desc" className="mb-1 block text-sm font-medium">Description</label>
@@ -63,5 +70,6 @@ export default function NewTicketPage() {
         <Button type="button" variant="secondary" onClick={() => router.push("/tickets")}>Cancel</Button>
       </div>
     </form>
+    </div>
   );
 }

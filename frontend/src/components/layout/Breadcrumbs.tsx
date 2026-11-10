@@ -10,7 +10,8 @@ export function Breadcrumbs() {
   const segs = usePathname().split("/").filter(Boolean);
   const crumbs = segs.map((s, i) => ({
     href: "/" + segs.slice(0, i + 1).join("/"),
-    label: SEGMENT_LABEL[s] ?? (/^\d+$/.test(s) ? `#${s}` : s),
+    // Ticket ids read as the ticket number shown everywhere else (XS-00042); other ids as #id.
+    label: SEGMENT_LABEL[s] ?? (/^\d+$/.test(s) ? (segs[i - 1] === "tickets" ? `XS-${s.padStart(5, "0")}` : `#${s}`) : s),
   }));
   return (
     <nav aria-label="Breadcrumb" className="min-w-0">
