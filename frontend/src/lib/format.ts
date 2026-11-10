@@ -27,3 +27,10 @@ export function fmtRelative(iso: string, now: number = Date.now()) {
 }
 
 export const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]!.toUpperCase()).join("");
+
+/** Display number for a ticket id, matching the backend's ticket_number (XS-00042). */
+export const ticketNo = (id: number | string) => `XS-${String(id).padStart(5, "0")}`;
+
+const ACTIVITY_LABEL: Record<string, string> = { ai: "AI suggestion", assignee: "Assignee", comment: "Note", created: "Created", resolution: "Resolution" };
+/** Human label for a ticket activity kind ("ai" reads as "AI suggestion", not "Ai"). */
+export const activityLabel = (kind: string) => ACTIVITY_LABEL[kind] ?? label(kind);

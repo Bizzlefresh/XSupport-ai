@@ -21,7 +21,7 @@ import { TroubleshootingAssistant } from "@/features/ai/TroubleshootingAssistant
 import { RelatedArticles, SimilarIncidents } from "@/features/knowledge/RetrievalPanels";
 import { useAssignees, useCategories } from "@/features/tickets/hooks";
 import { ApiError, api } from "@/lib/api";
-import { PRIORITIES, STATUSES, fmtDate, fmtRelative, label } from "@/lib/format";
+import { PRIORITIES, STATUSES, activityLabel, fmtDate, fmtRelative, label } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { Activity, TicketDetail } from "@/types/api";
 
@@ -63,7 +63,7 @@ function ActivityItem({ a }: { a: Activity }) {
       <div className="min-w-0 flex-1 pt-1">
         <p className="text-xs text-muted">
           <span className="font-medium text-ink">{a.user?.full_name ?? "System"}</span>
-          {" · "}{isAi ? "AI suggestion event" : label(a.kind)}{" · "}
+          {" · "}{activityLabel(a.kind)}{" · "}
           <time dateTime={a.created_at} title={fmtDate(a.created_at)}>{fmtRelative(a.created_at)}</time>
         </p>
         {/* Plain text: ticket content is untrusted and never interpreted as HTML. */}
@@ -252,7 +252,7 @@ export default function TicketDetailPage() {
               Suggestions only. Confidence scores are estimates from synthetic-data training, not guarantees. Nothing here changes the ticket until a technician accepts it.
             </p>
           </div>
-          <CategoryAssistant ticketId={t.id} onTicketChanged={refreshAfterAi} />
+          <CategoryAssistant ticketId={t.id} currentCategory={t.category} onTicketChanged={refreshAfterAi} />
           <TroubleshootingAssistant ticketId={t.id} onCommented={refreshAfterAi} />
           <RelatedArticles ticketId={t.id} />
           <SimilarIncidents ticketId={t.id} />

@@ -235,5 +235,31 @@ not a guarantee; on narrow screens a header link jumps to it. Loading skeleton; 
   383 seeded tickets. The isolated runner prevents this from now on.
 
 **Not done**
-- AI panels themselves are not restyled (Phase 5); they keep their old internals inside the new column.
 - No bulk actions, saved views or keyboard row navigation. No ESLint config. Lighthouse and screen-reader checks not run.
+
+## UI redesign – Phase 5 (AI panels) (complete)
+- Shared AI primitives (`features/ai/ui.tsx`): amber panel shell with an icon header, "AI suggestion" badge, confidence meter that marks the
+  review threshold and is labelled "estimate", match-strength chips (icon + text, never colour alone), callouts, skeletons, and a collapsible
+  "About this result" for model, version, latency and caveats.
+- **Category suggestion**: shows the approved category next to the suggestion ("Approved now: X → accepting sets Y"), low-confidence callout
+  when below the threshold, alternatives as small bars, Accept / Reject / choose a different category, optional feedback, reviewed state with
+  decision, reviewer and time, earlier suggestions, success/error toasts. The approved category changes only on accept or edit.
+- **Troubleshooting steps**: status callout with icon (matched / not validated / not enough evidence / no articles), cited article cards with
+  numbered steps, escalation note, one-click "add as a ticket note" (disabled once added), past resolutions, rating buttons with icons and an
+  optional comment.
+- **Related articles** and **Similar past tickets**: match chips, scores, ranking-method picker, snippets/resolutions, ticket numbers as XS-00042.
+- Activity labels: "ai" now reads "AI suggestion" on the dashboard and ticket page (was "Ai").
+- No backend change.
+
+**Executed (2026-11-10)**
+- `npm run typecheck` clean; `npm run build` succeeded.
+- `scripts/e2e.sh`: **29 passed** (dashboard 8, tickets 12, AI 9). New AI tests: a suggestion leaves the approved category unchanged until
+  Accept; Apply sets the technician's choice; Reject changes nothing; troubleshooting cites an approved article, adds its steps as a note and
+  takes a rating; related articles and similar tickets load and re-rank (checks the request's method); the dashboard AI review queue in its
+  populated state (light and dark); AI column with results at 375 and 1440 px in light and dark (no overflow, no console errors).
+  AI tests repeated 3 times: 27/27. Screenshots inspected by eye.
+
+**Not done**
+- Confidence values are not recalibrated; the meter shows the model's raw estimate (calibration error 0.147 on synthetic test data).
+- Element screenshots of the AI column show the sticky top bar part-way down (screenshot artefact, not the page).
+- Knowledge, Analytics and Evaluation pages still use old layouts (Phase 6). No ESLint config; Lighthouse and screen-reader checks not run.

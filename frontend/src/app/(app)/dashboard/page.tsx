@@ -16,7 +16,7 @@ import { Select } from "@/components/ui/select";
 import { useCategories } from "@/features/tickets/hooks";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
-import { fmtDate, fmtHours, label, PRIORITIES, STATUSES } from "@/lib/format";
+import { activityLabel, fmtDate, fmtHours, label, PRIORITIES, STATUSES } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { Health, Insights, Overview, TicketPage } from "@/types/api";
 
@@ -327,7 +327,7 @@ export default function DashboardPage() {
                     a.kind === "ai" ? "bg-ai" : "bg-brand")} />
                   <p className="min-w-0">
                     <Link href={`/tickets/${a.ticket_id}`} className="font-medium text-brand hover:underline">{a.ticket_number}</Link>{" "}
-                    <span className="text-muted">{label(a.kind)}</span>
+                    <span className="text-muted">{activityLabel(a.kind)}</span>
                   </p>
                   <p className="mt-0.5 break-words text-xs">{a.detail}</p>
                   <p className="mt-0.5 text-xs text-muted">{a.user ?? "System"} · {fmtDate(a.created_at)}</p>
