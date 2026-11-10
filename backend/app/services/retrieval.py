@@ -16,52 +16,59 @@ from app.schemas.retrieval import ArticleHitOut, ArticleHitsOut, RetrievalMeta, 
 
 REPORT = Path(__file__).resolve().parents[3] / "data" / "evaluation" / "retrieval_report.json"
 SUMMARY_CHARS = 240
-_lock = threading.Lock()
-_cache: dict = {}
+# One cache entry and one lock per index. Ticket writes change only the ticket index's version, so article search
+# neither rebuilds nor waits while the ticket index is rebuilt (and vice versa).
+_locks = {"article": threading.Lock(), "ticket": threading.Lock()}
+_cache: dict[str, tuple] = {}
 
 
-def _version(db: Session) -> tuple:
-    a = db.execute(select(func.count(), func.max(KnowledgeArticle.updated_at))
-                   .where(KnowledgeArticle.status == ArticleStatus.approved)).one()
-    t = db.execute(select(func.count(), func.max(Ticket.updated_at))).one()
+def _version(db: Session, kind: str) -> tuple:
+    if kind == "article":
+        row = db.execute(select(func.count(), func.max(KnowledgeArticle.updated_at))
+                         .where(KnowledgeArticle.status == ArticleStatus.approved)).one()
+    else:
+        row = db.execute(select(func.count(), func.max(Ticket.updated_at))).one()
     s = get_settings()
-    return (tuple(map(str, a)), tuple(map(str, t)), s.embedding_provider, s.embedding_model)
+    return (tuple(map(str, row)), s.embedding_provider, s.embedding_model)
 
 
 def reset_cache() -> None:
-    with _lock:
+    with _locks["article"], _locks["ticket"]:
         _cache.clear()
 
 
-def _build(db: Session):
-    """Two separate indexes, because the article threshold was validated on an article-only index (see evaluate_retrieval.py)."""
+def _docs(db: Session, kind: str) -> list[Doc]:
+    if kind == "article":
+        return [Doc(f"article:{a.id}", "article", a.id, article_doc_text(a.title, a.problem_description, a.steps, a.tags),
+                    {"title": a.title, "category": a.category.name if a.category else None,
+                     "snippet": a.problem_description[:SUMMARY_CHARS], "source_type": a.source_type})
+                for a in db.scalars(select(KnowledgeArticle).where(KnowledgeArticle.status == ArticleStatus.approved)).unique()]
+    return [Doc(f"ticket:{t.id}", "ticket", t.id, ticket_doc_text(t.subject, t.description),
+                {"title": t.subject, "external_id": t.external_id, "status": t.status.value,
+                 "category": (t.category.name if t.category else None),
+                 "resolution_summary": (t.resolution_summary or "")[:SUMMARY_CHARS] or None})
+            for t in db.scalars(select(Ticket)).unique()]
+
+
+def _build(db: Session, kind: str):
+    """Articles and tickets get separate indexes, because the article threshold was validated on an article-only
+    index (see evaluate_retrieval.py). Returns (index, note) or None when there is nothing to index."""
+    docs = _docs(db, kind)
+    if not docs:
+        return None
     s = get_settings()
-    art_docs: list[Doc] = []
-    for a in db.scalars(select(KnowledgeArticle).where(KnowledgeArticle.status == ArticleStatus.approved)).unique():
-        art_docs.append(Doc(f"article:{a.id}", "article", a.id, article_doc_text(a.title, a.problem_description, a.steps, a.tags),
-                            {"title": a.title, "category": a.category.name if a.category else None,
-                             "snippet": a.problem_description[:SUMMARY_CHARS], "source_type": a.source_type}))
-    tk_docs: list[Doc] = []
-    for t in db.scalars(select(Ticket)).unique():
-        tk_docs.append(Doc(f"ticket:{t.id}", "ticket", t.id, ticket_doc_text(t.subject, t.description),
-                           {"title": t.subject, "external_id": t.external_id, "status": t.status.value,
-                            "category": (t.category.name if t.category else None),
-                            "resolution_summary": (t.resolution_summary or "")[:SUMMARY_CHARS] or None}))
-    built: dict = {}
-    for kind, docs in (("article", art_docs), ("ticket", tk_docs)):
-        if docs:
-            embedder, note = make_embedder(s.embedding_provider, s.embedding_model)
-            built[kind] = (RetrievalIndex(docs, embedder), note)
-    return built
+    embedder, note = make_embedder(s.embedding_provider, s.embedding_model)
+    return RetrievalIndex(docs, embedder), note
 
 
 def get_index(db: Session, kind: str):
-    ver = _version(db)
-    with _lock:
-        if _cache.get("ver") != ver:
-            _cache.clear()
-            _cache.update(ver=ver, built=_build(db))
-        return _cache["built"].get(kind)
+    ver = _version(db, kind)
+    with _locks[kind]:
+        entry = _cache.get(kind)
+        if entry is None or entry[0] != ver:
+            entry = (ver, _build(db, kind))
+            _cache[kind] = entry
+        return entry[1]
 
 
 def _article_threshold(embedder_name: str, method: str) -> float | None:

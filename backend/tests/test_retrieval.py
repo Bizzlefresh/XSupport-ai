@@ -192,3 +192,20 @@ def test_tiny_corpus_does_not_crash():
     idx = RetrievalIndex([Doc("ticket:1", "ticket", 1, "printer offline")], LsaEmbedder())
     assert idx.search("printer", "hybrid", "ticket", 3)[0].doc.key == "ticket:1"
     assert idx.search("printer", "hybrid", "article", 3) == []
+
+
+def test_ticket_writes_do_not_rebuild_the_article_index(client, h, kb, monkeypatch):
+    # Article search must not pay for (or wait on) a ticket-index rebuild after every ticket change.
+    from app.services import retrieval
+
+    built: list[str] = []
+    real = retrieval._build
+    monkeypatch.setattr(retrieval, "_build", lambda db, kind: (built.append(kind), real(db, kind))[1])
+    q = "/api/knowledge/search?q=printer jam&method=hybrid"
+    assert client.get(q, headers=h).status_code == 200
+    t = mk(client, h, "Printer jam", "Paper stuck")
+    client.post(f"/api/tickets/{t['id']}/comments", json={"body": "note"}, headers=h)
+    assert client.get(q, headers=h).status_code == 200
+    assert built.count("article") == 1  # built once, untouched by ticket writes
+    r = client.post("/api/ai/similar-incidents", json={"ticket_id": t["id"]}, headers=h)
+    assert r.status_code == 200 and built.count("ticket") == 1
