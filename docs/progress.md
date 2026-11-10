@@ -332,7 +332,7 @@ for admins); Login redesigned (card, logo, error callout); loading screen; ticke
 
 **CI**: frontend job runs `npm run lint -- --max-warnings=0`; new `e2e` job builds the Docker stack with throwaway
 credentials and runs `scripts/e2e.sh`, uploading screenshots/traces on failure. Workflow validated with actionlint 1.7.7.
-The e2e job has not run on GitHub yet.
+Its first GitHub run failed (`@playwright/test` missing on a fresh checkout); `scripts/e2e.sh` now installs frontend dependencies in the Playwright container when needed (bbb9add).
 
 **Executed (2026-11-10)**
 - Backend `pytest` **150 passed**, `ruff` clean (python:3.12-slim). Frontend `npm ci`, `lint` (0 warnings), `typecheck`,
@@ -344,7 +344,9 @@ The e2e job has not run on GitHub yet.
 - No manual screen-reader testing (NVDA/VoiceOver) and no testing with real technicians. Automated checks catch only part of
   accessibility problems.
 - Lighthouse not run on signed-in pages.
-- CI e2e job unverified on GitHub.
+
+**CI on GitHub (2026-11-10)**: run 42765397861 for bbb9add passed all three jobs: backend, frontend (lint, typecheck,
+build) and e2e (**56 passed**, including the axe scans).
 
 ## Overall status (2026-11-10)
 Backend phases 1-8 and UI redesign phases 1-7 are complete. TeamDynamix remains disabled (authorization not granted); all data
