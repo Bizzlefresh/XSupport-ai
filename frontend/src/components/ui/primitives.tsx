@@ -71,3 +71,44 @@ export function StatCard({ label, value, hint, icon: Icon, href, loading, tone =
     ? <Link href={href} className={cn(cls, "hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md focus-visible:border-brand")}>{body}</Link>
     : <div className={cls}>{body}</div>;
 }
+
+/** Titled card with an optional icon, header actions and a footer note. */
+export function SectionCard({ id, title, icon: Icon, actions, note, children, className, bodyClassName }: {
+  id: string; title: string; icon?: LucideIcon; actions?: ReactNode; note?: ReactNode; children: ReactNode;
+  className?: string; bodyClassName?: string;
+}) {
+  return (
+    <section id={id} aria-labelledby={`${id}-h`} className={cn("flex min-w-0 scroll-mt-20 flex-col rounded-lg border border-line bg-panel shadow-sm", className)}>
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
+        <h2 id={`${id}-h`} className="flex items-center gap-2 text-sm font-semibold">
+          {Icon && <Icon aria-hidden className="h-4 w-4 text-muted" />}{title}
+        </h2>
+        {actions}
+      </header>
+      <div className={cn("flex-1 p-5", bodyClassName)}>{children}</div>
+      {note && <div className="border-t border-line px-5 py-2.5 text-xs text-muted">{note}</div>}
+    </section>
+  );
+}
+
+/** Shared table styles: recessive header, row dividers, numbers right-aligned with tabular figures. */
+export const tbl = {
+  // relative: keeps absolutely positioned descendants (e.g. sr-only labels) inside the scroll box, so they cannot widen the page.
+  wrap: "relative -mx-5 overflow-x-auto",
+  table: "w-full text-left text-sm",
+  thead: "border-b border-line text-xs text-muted",
+  th: "whitespace-nowrap px-5 py-2 font-medium first:pl-5",
+  thNum: "whitespace-nowrap px-5 py-2 text-right font-medium",
+  tr: "border-b border-line last:border-0",
+  td: "px-5 py-2.5",
+  tdNum: "tabular whitespace-nowrap px-5 py-2.5 text-right",
+};
+
+/** Inline proportional bar for a table cell (the number is always printed beside it). */
+export function InlineBar({ value, max, className }: { value: number; max: number; className?: string }) {
+  return (
+    <span aria-hidden className="block h-1.5 w-full min-w-12 overflow-hidden rounded-full bg-line/60">
+      <span className={cn("block h-full rounded-full bg-brand", className)} style={{ width: `${max > 0 ? Math.max(2, (value / max) * 100) : 0}%` }} />
+    </span>
+  );
+}

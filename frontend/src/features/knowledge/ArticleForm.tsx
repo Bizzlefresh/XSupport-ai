@@ -14,6 +14,18 @@ export interface ArticleDraft {
   tags: string[]; source_note: string;
 }
 
+function Field({ id, label, hint, required, children }: { id: string; label: string; hint?: string; required?: boolean; children: React.ReactNode }) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-1 flex items-baseline justify-between gap-2 text-sm font-medium">
+        <span>{label}{required && <span aria-hidden className="text-danger"> *</span>}</span>
+        {hint && <span className="text-xs font-normal text-muted">{hint}</span>}
+      </label>
+      {children}
+    </div>
+  );
+}
+
 export function ArticleForm({ initial, busy, error, submitLabel, onSubmit, onCancel }: {
   initial?: Article; busy: boolean; error: string | null; submitLabel: string;
   onSubmit: (v: ArticleDraft) => void; onCancel?: () => void;
@@ -27,35 +39,43 @@ export function ArticleForm({ initial, busy, error, submitLabel, onSubmit, onCan
   const [tags, setTags] = useState((initial?.tags ?? []).join(", "));
   const [note, setNote] = useState(initial?.source_note ?? "");
   const stepList = steps.split("\n").map((s) => s.trim()).filter(Boolean);
-  const valid = title.trim() && problem.trim() && stepList.length > 0 && note.trim();
+  const missing = [!title.trim() && "title", !problem.trim() && "problem description", stepList.length === 0 && "at least one step", !note.trim() && "source note"].filter(Boolean);
 
   return (
-    <form className="space-y-4" onSubmit={(e) => {
+    <form aria-label="Article" className="space-y-5 rounded-lg border border-line bg-panel p-5 shadow-sm sm:p-6" onSubmit={(e) => {
       e.preventDefault();
       onSubmit({ title, category_id: cat ? Number(cat) : null, problem_description: problem, steps: stepList,
         escalation: esc.trim() || null, tags: tags.split(",").map((t) => t.trim()).filter(Boolean), source_note: note });
     }}>
-      <label className="block text-sm">Title<Input className="mt-1" value={title} maxLength={200} onChange={(e) => setTitle(e.target.value)} required /></label>
-      <label className="block text-sm">Category
-        <Select className="mt-1" value={cat} onChange={(e) => setCat(e.target.value)}>
-          <option value="">No category</option>
-          {cats.data?.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-        </Select></label>
-      <label className="block text-sm">Problem description
-        <Textarea className="mt-1" rows={3} maxLength={5000} value={problem} onChange={(e) => setProblem(e.target.value)} required /></label>
-      <label className="block text-sm">Troubleshooting steps <span className="text-muted">(one per line)</span>
-        <Textarea className="mt-1" rows={6} value={steps} onChange={(e) => setSteps(e.target.value)} required /></label>
-      <label className="block text-sm">When to escalate <span className="text-muted">(optional)</span>
-        <Textarea className="mt-1" rows={2} maxLength={2000} value={esc} onChange={(e) => setEsc(e.target.value)} /></label>
-      <label className="block text-sm">Tags <span className="text-muted">(comma separated)</span>
-        <Input className="mt-1" value={tags} onChange={(e) => setTags(e.target.value)} /></label>
-      <label className="block text-sm">Source note <span className="text-muted">(where this guidance comes from)</span>
-        <Textarea className="mt-1" rows={2} maxLength={1000} value={note} onChange={(e) => setNote(e.target.value)} required /></label>
+      <div className="grid gap-5 sm:grid-cols-[1fr_16rem]">
+        <Field id="a-title" label="Title" required><Input id="a-title" value={title} maxLength={200} onChange={(e) => setTitle(e.target.value)} required /></Field>
+        <Field id="a-cat" label="Category">
+          <Select id="a-cat" className="w-full" value={cat} onChange={(e) => setCat(e.target.value)}>
+            <option value="">No category</option>{cats.data?.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </Select>
+        </Field>
+      </div>
+      <Field id="a-problem" label="Problem description" required>
+        <Textarea id="a-problem" rows={3} maxLength={5000} value={problem} onChange={(e) => setProblem(e.target.value)} required />
+      </Field>
+      <Field id="a-steps" label="Troubleshooting steps" hint={`One per line · ${stepList.length} step${stepList.length === 1 ? "" : "s"}`} required>
+        <Textarea id="a-steps" rows={7} value={steps} onChange={(e) => setSteps(e.target.value)} required />
+      </Field>
+      <Field id="a-esc" label="When to escalate" hint="Optional">
+        <Textarea id="a-esc" rows={2} maxLength={2000} value={esc} onChange={(e) => setEsc(e.target.value)} />
+      </Field>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field id="a-tags" label="Tags" hint="Comma separated"><Input id="a-tags" value={tags} onChange={(e) => setTags(e.target.value)} /></Field>
+        <Field id="a-note" label="Source note" hint="Where this guidance comes from" required>
+          <Input id="a-note" maxLength={1000} value={note} onChange={(e) => setNote(e.target.value)} required />
+        </Field>
+      </div>
       <p className="text-xs text-muted">Plain text only; HTML tags are removed. Saved changes need administrator approval before they are used for suggestions.</p>
       {error && <p role="alert" className="text-sm text-danger">{error}</p>}
-      <div className="flex gap-2">
-        <Button type="submit" disabled={busy || !valid}>{busy ? "Saving…" : submitLabel}</Button>
+      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-line pt-4">
+        {missing.length > 0 && <p className="mr-auto text-xs text-muted">Still needed: {missing.join(", ")}.</p>}
         {onCancel && <Button type="button" variant="secondary" onClick={onCancel}>Cancel</Button>}
+        <Button type="submit" disabled={busy || missing.length > 0}>{busy ? "Saving…" : submitLabel}</Button>
       </div>
     </form>
   );

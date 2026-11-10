@@ -7,7 +7,11 @@ export default defineConfig({
   outputDir: "./e2e-artifacts/results",
   timeout: 60_000,
   retries: 0,
-  workers: 2,
+  // One worker and a 10 s assertion timeout: the suite runs inside Docker Desktop's VM (4 CPUs here) alongside two
+  // full stacks, and two parallel Chromium workers starved the backend into multi-second responses. Each request is
+  // fast on its own (classify ~0.1 s, retrieval index rebuild ~0.3 s), so this is test-host load, not app latency.
+  workers: 1,
+  expect: { timeout: 10_000 },
   reporter: [["list"]],
   use: {
     baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3000",

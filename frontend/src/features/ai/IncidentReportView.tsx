@@ -1,14 +1,27 @@
+import { Siren } from "lucide-react";
+
+import { SectionCard } from "@/components/ui/primitives";
 import type { IncidentReport } from "@/types/api";
 
 export function IncidentReportView({ r }: { r: IncidentReport }) {
   const m = r.main_dataset, o = r.other_seeds;
   return (
-    <section aria-labelledby="incd" className="space-y-2 rounded-lg border border-line bg-panel p-5">
-      <h2 id="incd" className="text-sm font-medium">Incident-burst detection</h2>
-      <p className="text-sm">Rule: {r.rule}. It found {m.truth_found} of {m.truth_bursts} planted bursts with {m.false_alarms} false alarms, and
-        {" "}{o.bursts_found} of {o.bursts_present} across {o.datasets} other generated datasets with {o.false_alarms} false alarms.</p>
-      <ul className="list-disc space-y-1 pl-5 text-xs text-muted">{r.caveats.map((c) => <li key={c}>{c}</li>)}</ul>
-      <p className="text-xs text-muted">Full tables for the thesis are in <code>docs/results.md</code>, generated from the saved reports.</p>
-    </section>
+    <SectionCard id="incd" title="Incident-burst detection" icon={Siren}
+      note={<>Full tables for the thesis are in <code>docs/results.md</code>, generated from the saved reports.</>}>
+      <p className="text-sm text-muted">Rule: {r.rule}.</p>
+      <dl className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {([
+          ["Planted bursts found", `${m.truth_found} / ${m.truth_bursts}`, "Main dataset"],
+          ["False alarms", String(m.false_alarms), "Main dataset"],
+          ["Bursts found, other datasets", `${o.bursts_found} / ${o.bursts_present}`, `${o.datasets} generated datasets`],
+          ["False alarms, other datasets", String(o.false_alarms), `${o.datasets} generated datasets`],
+        ] as const).map(([k, v, sub]) => (
+          <div key={k} className="rounded-md border border-line bg-paper px-4 py-3">
+            <dt className="text-xs text-muted">{k}</dt><dd className="tabular mt-1 text-xl font-semibold">{v}</dd><dd className="mt-0.5 text-xs text-muted">{sub}</dd>
+          </div>
+        ))}
+      </dl>
+      <ul className="mt-4 list-disc space-y-1 pl-5 text-xs text-muted">{r.caveats.map((c) => <li key={c}>{c}</li>)}</ul>
+    </SectionCard>
   );
 }

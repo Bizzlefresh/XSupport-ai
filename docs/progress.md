@@ -262,4 +262,45 @@ not a guarantee; on narrow screens a header link jumps to it. Loading skeleton; 
 **Not done**
 - Confidence values are not recalibrated; the meter shows the model's raw estimate (calibration error 0.147 on synthetic test data).
 - Element screenshots of the AI column show the sticky top bar part-way down (screenshot artefact, not the page).
-- Knowledge, Analytics and Evaluation pages still use old layouts (Phase 6). No ESLint config; Lighthouse and screen-reader checks not run.
+- No ESLint config; Lighthouse and screen-reader checks not run.
+
+## UI redesign – Phase 6 (Knowledge, Analytics, Evaluation) (complete)
+- Shared: `SectionCard`, table styles (`tbl`, numbers right-aligned and unwrapped), `InlineBar`, chart theme and a sequential
+  single-hue heat scale (`lib/chart.ts`), `ArticleStatusBadge` (icon + text).
+- **Knowledge list**: search-mode switch (ranked by similarity / browse and filter), ranked results numbered with match labels,
+  article cards with status, category, step count, source and relative update time; skeleton, empty and error states. Switching
+  mode now clears the applied search (before, a ranked query was silently reused as a literal text filter and showed no results).
+- **Article page**: status and category header, draft/archived warning, numbered steps, escalation callout, tags; Manage card
+  (edit; admins approve, return to draft, archive with confirmation) and Source card; toasts; 404 state.
+  **Editor**: card form with required markers, live step count, "still needed" list. **New article** restyled.
+- **Analytics**: KPI tiles from the insights response (unresolved, unresolved over 7 days, possible incidents, recurring
+  subjects); incident cards with XS ticket links; weekly volume as a category × week **heatmap** (replaces a 9-colour stacked bar
+  with an unvalidated palette: per the dataviz method, 8+ series fold into a single-hue sequential encoding with counts printed);
+  resolution tables with median bars; backlog bar chart; recurring issues table; AI-use tiles; data-quality note. Deep link
+  `/analytics#inc` scrolls into place after data loads.
+- **Evaluation**: synthetic-data disclaimer, section links, live review tiles; classifier headline metrics (accuracy with CI,
+  macro-F1, unseen problem types, ECE), setup, comparison table with the deployed row marked, per-category F1 bars, confusion
+  matrix heat cells with the diagonal outlined, threshold tiles and calibration table with accuracy bar + confidence marker,
+  error cards, limitations; retrieval, assistant and incident reports restyled. Same figures and caveats as before.
+
+**Bugs found and fixed**
+- Backend performance: the retrieval cache was keyed on tickets *and* articles together, so any ticket write made the next
+  article search rebuild both indexes under one global lock (measured 0.33–0.83 s vs 0.02 s warm; under load requests queued
+  behind it). Now one cache entry and lock per index: after a ticket write, article search took ~0.005 s. Test added.
+- Pages scrolled sideways at 768 px: `sr-only` labels in header cells of horizontally scrolled tables are absolutely positioned
+  and escaped their non-positioned scroll box. Table wrappers are now `relative`.
+- Analytics "Unresolved tickets" tile linked to `?status=open`, which omits new and pending tickets; link removed.
+
+**Executed (2026-11-10)**
+- Backend `pytest`: **150 passed**; `ruff` clean. `npm run typecheck` clean; `npm run build` succeeded.
+- `scripts/e2e.sh --repeat-each=2`: **84 passed** (42 tests × 2; 13 new: knowledge/analytics/evaluation at 375/768/1024/1440
+  in light and dark, ranked search and status filter, technician draft + edit, admin approve + archive with confirmation,
+  Incident Patterns deep link, heatmap rows and window change, evaluation section links). Screenshots inspected by eye.
+- Playwright now runs with 1 worker and a 10 s assertion timeout. With 2 workers, Docker Desktop's 4-CPU VM (hosting the demo
+  stack, the e2e stack and Chromium) was starved and some responses took several seconds; single requests are fast.
+- Two performance probes wrote to the demo database (3 notes and 2 priority changes on XS-00383); those rows were deleted and
+  the priority is back to High. The ticket's `updated_at` moved forward.
+
+**Not done**
+- Knowledge breadcrumb still shows `#id` (articles have no display number). No ESLint config; Lighthouse and screen-reader
+  checks not run (Phase 7).

@@ -1,4 +1,4 @@
-import { AlertOctagon, ArrowDown, ArrowUp, Circle, CircleCheck, CircleDot, Clock, Minus, type LucideIcon } from "lucide-react";
+import { AlertOctagon, Archive, ArrowDown, ArrowUp, Circle, CircleCheck, CircleDot, Clock, FilePen, Minus, type LucideIcon } from "lucide-react";
 
 import { label } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -25,3 +25,9 @@ function Badge({ value, map }: { value: string; map: Record<string, [string, Luc
 }
 export const PriorityBadge = ({ value }: { value: string }) => <Badge value={value} map={PRIORITY} />;
 export const StatusBadge = ({ value }: { value: string }) => <Badge value={value} map={STATUS} />;
+const ARTICLE: Record<string, [string, LucideIcon]> = {
+  approved: ["border-ok/40 bg-ok/10 text-ok", CircleCheck],
+  draft: ["border-warn/40 bg-warn/10 text-warn", FilePen],
+  archived: ["border-line bg-line/40 text-muted", Archive],
+};
+export const ArticleStatusBadge = ({ value }: { value: string }) => <Badge value={value} map={ARTICLE} />;

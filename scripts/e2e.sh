@@ -8,6 +8,7 @@ cd "$(dirname "$0")/.."
 PLAYWRIGHT_IMAGE="mcr.microsoft.com/playwright:v1.64.1-noble"   # keep in step with @playwright/test in package.json
 PW="$(grep -E '^SEED_TECH_PASSWORD=' .env 2>/dev/null | cut -d= -f2- || true)"
 [ -n "$PW" ] || { echo "Set SEED_TECH_PASSWORD in .env (the seeded technician password)." >&2; exit 1; }
+ADMIN_PW="$(grep -E '^SEED_ADMIN_PASSWORD=' .env 2>/dev/null | cut -d= -f2- || true)"   # optional: admin-only tests skip without it
 
 compose() { docker compose -p xsupport-e2e -f docker-compose.yml -f docker-compose.e2e.yml "$@"; }
 cleanup() { compose down -v --remove-orphans >/dev/null 2>&1 || true; }
@@ -20,5 +21,5 @@ curl -sf -m 3 http://localhost:8001/api/health >/dev/null || { echo "Backend did
 compose exec -T backend python ../scripts/seed_database.py | grep -v -i password
 
 docker run --rm --network host --ipc=host \
-  -e E2E_BASE_URL=http://localhost:3001 -e E2E_PASSWORD="$PW" \
+  -e E2E_BASE_URL=http://localhost:3001 -e E2E_PASSWORD="$PW" -e E2E_ADMIN_PASSWORD="$ADMIN_PW" \
   -v "$PWD/frontend":/app -w /app "$PLAYWRIGHT_IMAGE" npx playwright test "$@"
