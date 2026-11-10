@@ -24,5 +24,13 @@ Topbar (breadcrumbs, Ctrl/Cmd+K palette searching pages and real tickets, theme 
 - Nav shows only real routes. "AI Assistant" lives inside each ticket page (no route). "Incident Patterns" and "Integration Status" deep-link to sections of Analytics and Settings.
 - Notifications bell omitted: the backend has no notification data, so it would be a dead control.
 
-## Priorities
-3 Dashboard, 4 Tickets (table, filters, details), 5 AI panels, 6 Knowledge/Analytics/Evaluation, 7 polish and tests.
+## Outcome (phases 3-7, Nov 2026)
+All pages redesigned on the shared components: Dashboard, Tickets list/detail/new, AI panels, Knowledge list/article/editor,
+Analytics, Evaluation, Settings, Login. Details, measurements and bugs found per phase are in `docs/progress.md`.
+
+- Accessibility: ESLint with the full jsx-a11y recommended rules (0 warnings); axe-core scans every page, the confirm dialog,
+  the account menu and the command palette in light and dark mode with no serious or critical violations. Fixes this needed:
+  darker light-mode status tokens (all >= 5:1 on their tints), heatmap intensity capped so text stays >= 4.5:1, accessible
+  names that contain the visible text, keyboard-focusable scroll regions, valid listbox and definition-list structure.
+- Lighthouse (login page, the only page reachable without a session token): 100/100/100/100 desktop, 98/100/100/100 mobile.
+- Not done: manual screen-reader testing (NVDA/VoiceOver), Lighthouse on signed-in pages, bulk actions and saved views.

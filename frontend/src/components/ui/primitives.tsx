@@ -104,6 +104,19 @@ export const tbl = {
   tdNum: "tabular whitespace-nowrap px-5 py-2.5 text-right",
 };
 
+/**
+ * Horizontally scrollable box for wide tables. Focusable and named so keyboard users can scroll it (WCAG 2.1.1).
+ */
+export function ScrollBox({ label, className, children }: { label: string; className?: string; children: ReactNode }) {
+  return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scroll container must be focusable to scroll by keyboard
+    <div role="region" aria-label={label} tabIndex={0}
+      className={cn(tbl.wrap, "rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand", className)}>
+      {children}
+    </div>
+  );
+}
+
 /** Inline proportional bar for a table cell (the number is always printed beside it). */
 export function InlineBar({ value, max, className }: { value: number; max: number; className?: string }) {
   return (

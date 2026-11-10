@@ -1,10 +1,12 @@
 # Limitations and honest status
 
 ## Not verified
-- UI was built and type-checked but not clicked through in a browser by the author.
-- Backend tests use SQLite. Docker Compose with PostgreSQL was run once (2026-11-09): migrations, seed and the dashboard work; the backend test suite has not been run against PostgreSQL locally.
+- The UI is exercised by automated Playwright tests (rendering, workflows, axe scans) but has not been tested with a screen
+  reader or by real technicians. Automated accessibility checks find only part of real accessibility problems.
+- The CI e2e job was added but has not run on GitHub yet; the same script passes locally.
+- Backend unit tests always use in-memory SQLite, also in CI. PostgreSQL is exercised by CI (migrations up/down/up, seed) and by the Docker Compose stack that every e2e run builds and seeds (run many times since 2026-11-09), not by the unit tests.
 - Optional sentence-transformers embeddings and a sentence-embedding classifier were never run.
-- Frontend e2e tests (Playwright, `scripts/e2e.sh`) cover the dashboard, tickets, AI panels, knowledge, analytics and evaluation pages.
+- Frontend e2e tests (Playwright, `scripts/e2e.sh`) cover every page; they run on a throwaway stack with synthetic data.
 
 ## TeamDynamix
 - Authorization for StFX TeamDynamix was **not granted** (security reasons). No connection was made.

@@ -302,5 +302,50 @@ not a guarantee; on narrow screens a header link jumps to it. Loading skeleton; 
   the priority is back to High. The ticket's `updated_at` moved forward.
 
 **Not done**
-- Knowledge breadcrumb still shows `#id` (articles have no display number). No ESLint config; Lighthouse and screen-reader
-  checks not run (Phase 7).
+- Knowledge breadcrumb still shows `#id` (articles have no display number).
+
+## UI redesign – Phase 7 (polish and tests) (complete)
+**Lint**: ESLint 9 flat config (`frontend/eslint.config.mjs`) with Next's core-web-vitals and TypeScript presets plus the
+full jsx-a11y recommended set; `npm run lint` passes with 0 warnings. Findings fixed: dropdown menu closed via a click
+handler on a non-focusable `role="menu"` (items now close it and return focus to the button); two intentional patterns
+annotated with reasons (listbox options driven by `aria-activedescendant`; native `<dialog>` backdrop click, Esc closes).
+
+**Accessibility (axe-core, WCAG 2.1 A/AA)**: `frontend/e2e/a11y.spec.ts` scans login, dashboard, tickets, new ticket,
+ticket detail with AI results, confirm dialog, account menu, command palette, knowledge, article, analytics, evaluation and
+settings in light and dark mode, failing on serious/critical violations. Fixed to get there:
+- Light-mode contrast: ok, info, warn, ai and muted tokens darkened so small text clears 4.5:1 on its own tint (worst cases
+  now 5.0-5.5:1, measured from axe's colour pairs); dark mode unchanged.
+- Heatmaps: white text on mid-tone cells failed (2.8-4.2:1). The scale is now capped per theme (`--heat-*`) so normal text
+  passes on every cell (~6.3:1 light, ~5.3:1 dark).
+- Accessible names now contain the visible text (search button, account button) for voice-control users.
+- Horizontally scrollable tables are focusable, named regions (`ScrollBox`), so they can be scrolled by keyboard.
+- Command palette: status text moved out of the listbox, and the listbox renders only when it has options.
+- Settings: invalid `<dl>` content (list and paragraph inside it) restructured.
+
+**Lighthouse 13.5** (login page; signed-in pages hold the token in sessionStorage, which a plain Lighthouse run cannot set):
+desktop 100 performance / 100 accessibility / 100 best practices / 100 SEO; mobile 98 / 100 / 100 / 100 (FCP 1.2 s,
+LCP 1.8 s, CLS 0). The only failed check at first was a console 404 for a missing favicon; an app icon was added.
+
+**Polish**: Settings redesigned (account card, integration status with icon + text, TeamDynamix shown disabled, users table
+for admins); Login redesigned (card, logo, error callout); loading screen; tickets filter bar uses rows of three below
+1536 px (selects were truncated at 1024 px).
+
+**CI**: frontend job runs `npm run lint -- --max-warnings=0`; new `e2e` job builds the Docker stack with throwaway
+credentials and runs `scripts/e2e.sh`, uploading screenshots/traces on failure. Workflow validated with actionlint 1.7.7.
+The e2e job has not run on GitHub yet.
+
+**Executed (2026-11-10)**
+- Backend `pytest` **150 passed**, `ruff` clean (python:3.12-slim). Frontend `npm ci`, `lint` (0 warnings), `typecheck`,
+  `build` all pass (node:22-alpine).
+- `scripts/e2e.sh`: **56 passed** (dashboard 8, tickets 12, AI 9, knowledge/analytics/evaluation/settings/login 21, axe 6).
+  Screenshots inspected by eye.
+
+**Not done**
+- No manual screen-reader testing (NVDA/VoiceOver) and no testing with real technicians. Automated checks catch only part of
+  accessibility problems.
+- Lighthouse not run on signed-in pages.
+- CI e2e job unverified on GitHub.
+
+## Overall status (2026-11-10)
+Backend phases 1-8 and UI redesign phases 1-7 are complete. TeamDynamix remains disabled (authorization not granted); all data
+is synthetic. Remaining gaps are listed in `docs/limitations.md`.

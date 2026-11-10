@@ -46,7 +46,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
       <div className="-m-5">
         <div className="flex items-center gap-3 border-b border-line px-4">
           <Search aria-hidden className="h-4 w-4 text-muted" />
-          <input ref={input} value={q} onChange={(e) => setQ(e.target.value)} role="combobox" aria-expanded aria-controls="palette-list"
+          <input ref={input} value={q} onChange={(e) => setQ(e.target.value)} role="combobox" aria-expanded={entries.length > 0} aria-controls={entries.length > 0 ? "palette-list" : undefined}
                  aria-activedescendant={entries[index] ? `pal-${entries[index].key}` : undefined} aria-label="Search pages and tickets"
                  placeholder="Search pages and tickets…" className="h-12 flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
                  onKeyDown={(e) => {
@@ -55,8 +55,10 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
                    else if (e.key === "Enter") go(entries[index]);
                  }} />
         </div>
-        <ul id="palette-list" role="listbox" aria-label="Results" className="max-h-80 overflow-y-auto p-2">
+        {entries.length > 0 && <ul id="palette-list" role="listbox" aria-label="Results" className="max-h-80 overflow-y-auto p-2">
           {entries.map((e, i) => (
+            // Keyboard selection lives on the input (aria-activedescendant + Enter/arrows), per the listbox pattern.
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
             <li key={e.key} id={`pal-${e.key}`} role="option" aria-selected={i === index} onMouseEnter={() => setIndex(i)} onClick={() => go(e)}
                 className={cn("flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm", i === index && "bg-brand/10 text-brand")}>
               <e.icon aria-hidden className="h-4 w-4 shrink-0" />
@@ -65,8 +67,9 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
               {i === index && <CornerDownLeft aria-hidden className="h-3.5 w-3.5 shrink-0" />}
             </li>
           ))}
-          {entries.length === 0 && <li className="px-3 py-6 text-center text-sm text-muted">{tickets.isFetching ? "Searching…" : "No matches"}</li>}
-        </ul>
+        </ul>}
+        {/* Status text sits outside the listbox: a listbox may only contain options. */}
+        {entries.length === 0 && <p role="status" className="px-3 pb-6 pt-4 text-center text-sm text-muted">{tickets.isFetching ? "Searching…" : "No matches"}</p>}
         <p className="border-t border-line px-4 py-2 text-xs text-muted">↑↓ to move · Enter to open · Esc to close</p>
       </div>
     </Dialog>

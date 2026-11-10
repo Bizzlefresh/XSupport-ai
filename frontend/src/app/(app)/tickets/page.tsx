@@ -156,8 +156,8 @@ export default function TicketsPage() {
       />
 
       <section role="search" aria-label="Filter tickets" className="rounded-lg border border-line bg-panel p-4 shadow-sm">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6 xl:grid-cols-[minmax(14rem,2fr)_repeat(5,minmax(0,1fr))_auto]">
-          <div className="sm:col-span-2 lg:col-span-6 xl:col-span-1">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-[minmax(14rem,2fr)_repeat(5,minmax(0,1fr))_auto]">
+          <div className="sm:col-span-2 lg:col-span-3 2xl:col-span-1">
             <label htmlFor="q" className="mb-1 block text-xs font-medium text-muted">Search tickets</label>
             <div className="relative">
               <Search aria-hidden className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
@@ -184,7 +184,7 @@ export default function TicketsPage() {
               {SORT_OPTIONS.map(([v, text]) => <option key={v} value={v}>{text}</option>)}
             </Select></div>
           <div className="flex items-end">
-            <Button variant="ghost" className="w-full lg:w-auto" disabled={chips.length === 0} onClick={clearAll}>Clear</Button>
+            <Button variant="ghost" className="w-full 2xl:w-auto" disabled={chips.length === 0} onClick={clearAll}>Clear</Button>
           </div>
         </div>
         {chips.length > 0 && (

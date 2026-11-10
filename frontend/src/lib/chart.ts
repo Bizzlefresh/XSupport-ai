@@ -6,9 +6,15 @@ export const chartTooltip = {
 };
 export const chartCursor = { fill: "rgb(var(--line) / 0.4)" };
 
-/** Sequential single-hue fill for heatmap cells: brand hue, alpha rising with magnitude (0 stays empty). */
+/**
+ * Sequential single-hue fill for heatmap cells: brand hue, intensity rising with magnitude (0 stays empty).
+ * The range comes from theme tokens (--heat-*), capped so normal ink text keeps >= 4.5:1 in both modes.
+ */
 export function heat(value: number, max: number) {
   if (value <= 0 || max <= 0) return { background: "transparent", strong: false };
-  const a = 0.12 + 0.68 * (value / max);
-  return { background: `rgb(var(--brand) / ${a.toFixed(3)})`, strong: a > 0.5 };
+  const t = Math.min(1, value / max);
+  return { background: `rgb(var(--brand) / calc(var(--heat-min) + var(--heat-span) * ${t.toFixed(3)}))`, strong: t > 0.55 };
 }
+
+/** Text classes for a heat cell. */
+export const heatText = (strong: boolean) => (strong ? "font-medium text-ink" : "text-ink");

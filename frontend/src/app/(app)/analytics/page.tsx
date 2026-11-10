@@ -6,10 +6,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-import { EmptyState, ErrorState, InlineBar, PageHeader, SectionCard, Skeleton, StatCard, tbl } from "@/components/ui/primitives";
+import { EmptyState, ErrorState, InlineBar, PageHeader, ScrollBox, SectionCard, Skeleton, StatCard, tbl } from "@/components/ui/primitives";
 import { Select } from "@/components/ui/select";
 import { api } from "@/lib/api";
-import { chartCursor, chartGrid, chartTick, chartTooltip, heat } from "@/lib/chart";
+import { chartCursor, chartGrid, chartTick, chartTooltip, heat, heatText } from "@/lib/chart";
 import { fmtDate, fmtHours, label, ticketNo } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { Insights } from "@/types/api";
@@ -31,7 +31,7 @@ function useReducedMotion() {
 function ResTable({ rows, caption }: { rows: Insights["resolution_by_category"]; caption: string }) {
   const max = Math.max(0, ...rows.map((r) => r.median_hours ?? 0));
   return (
-    <div className={tbl.wrap}>
+    <ScrollBox label={caption}>
       <table className={tbl.table}>
         <caption className="sr-only">{caption}</caption>
         <thead className={tbl.thead}><tr>
@@ -47,7 +47,7 @@ function ResTable({ rows, caption }: { rows: Insights["resolution_by_category"];
             <td className={cn(tbl.tdNum, "text-muted")}>{fmtHours(r.mean_hours)}</td>
           </tr>))}</tbody>
       </table>
-    </div>
+    </ScrollBox>
   );
 }
 
@@ -56,7 +56,7 @@ function VolumeHeatmap({ d }: { d: Insights }) {
   const max = Math.max(1, ...d.volume_by_week.flatMap((w) => d.categories.map((c) => Number(w[c] ?? 0))));
   const totals = d.volume_by_week.map((w) => d.categories.reduce((n, c) => n + Number(w[c] ?? 0), 0));
   return (
-    <div className="relative -mx-5 overflow-x-auto px-5">
+    <ScrollBox label="Weekly volume by category" className="px-5">
       <table className="w-full border-separate border-spacing-0.5 text-xs">
         <caption className="sr-only">Tickets created per week (columns, by week start) and category (rows)</caption>
         <thead>
@@ -78,7 +78,7 @@ function VolumeHeatmap({ d }: { d: Insights }) {
                 const h = heat(v, max);
                 return (
                   <td key={w.week as string} title={`${c}, week of ${w.week}: ${v}`}
-                    className={cn("tabular h-8 rounded text-center", h.strong ? "font-medium text-on-brand" : "text-ink", v === 0 && "text-muted/50")}
+                    className={cn("tabular h-8 rounded text-center", heatText(h.strong), v === 0 && "text-muted/50")}
                     style={{ background: h.background }}>
                     {v === 0 ? "·" : v}
                   </td>
@@ -92,7 +92,7 @@ function VolumeHeatmap({ d }: { d: Insights }) {
           </tr>
         </tbody>
       </table>
-    </div>
+    </ScrollBox>
   );
 }
 
@@ -202,7 +202,7 @@ export default function AnalyticsPage() {
 
             <SectionCard id="rec" title="Recurring issues" icon={Repeat} note="Identical subject lines seen three or more times (top 10). Near-duplicate wording is not merged.">
               {d.recurring_issues.length === 0 ? <EmptyState icon={Repeat} title="Nothing recurs three times yet" /> : (
-                <div className={tbl.wrap}>
+                <ScrollBox label="Recurring issues">
                   <table className={tbl.table}>
                     <caption className="sr-only">Recurring issues</caption>
                     <thead className={tbl.thead}><tr>
@@ -220,7 +220,7 @@ export default function AnalyticsPage() {
                         <td className={cn(tbl.tdNum, "text-muted")}>{fmtHours(r.median_hours)}</td>
                       </tr>))}</tbody>
                   </table>
-                </div>
+                </ScrollBox>
               )}
             </SectionCard>
           </div>

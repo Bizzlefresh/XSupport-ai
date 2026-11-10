@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 
-import { SectionCard, tbl } from "@/components/ui/primitives";
+import { ScrollBox, SectionCard, tbl } from "@/components/ui/primitives";
 import { METHOD_LABEL } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { Method, RankMetrics, RetrievalReport } from "@/types/api";
@@ -17,7 +17,7 @@ function Table({ caption, data }: { caption: string; data: Record<Method, RankMe
   return (
     <div>
       <p className="mb-2 text-xs text-muted">{caption}</p>
-      <div className={tbl.wrap}>
+      <ScrollBox label={caption}>
         <table className={tbl.table}>
           <caption className="sr-only">{caption}</caption>
           <thead className={tbl.thead}><tr><th scope="col" className={tbl.th}>Method</th>
@@ -26,7 +26,7 @@ function Table({ caption, data }: { caption: string; data: Record<Method, RankMe
             <tr key={m} className={tbl.tr}><td className={cn(tbl.td, "whitespace-nowrap font-medium")}>{METHOD_LABEL[m]}</td>
               {cols.map(([h, fn]) => <td key={h} className={cn(tbl.tdNum, h === "MRR 95% CI" && "whitespace-nowrap text-muted")}>{fn(data[m])}</td>)}</tr>))}</tbody>
         </table>
-      </div>
+      </ScrollBox>
     </div>
   );
 }

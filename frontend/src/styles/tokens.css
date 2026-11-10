@@ -6,18 +6,24 @@
   --panel: 255 255 255;
   --elevated: 255 255 255;
   --ink: 17 24 39;
-  --muted: 100 116 139;
+  --muted: 85 99 120;
   --line: 226 232 240;
   /* accents */
   --brand: 79 70 229;
   --on-brand: 255 255 255;
-  --info: 37 99 235;
+  --info: 29 78 216;
   /* AI-generated content keeps its own amber so it is never mistaken for ticket facts */
-  --ai: 161 98 7;
+  --ai: 140 82 10;
   /* semantic */
-  --ok: 21 128 61;
-  --warn: 180 83 9;
+  --ok: 20 110 55;
+  --warn: 154 72 10;
   --danger: 185 28 28;
+
+  /* Light values above clear 4.5:1 for small text on their own 10% tints (checked with axe, Nov 2026). */
+
+  /* heatmap scale: intensity is capped so normal ink text stays >= 4.5:1 on every cell (light ~6.3:1, dark ~5.3:1) */
+  --heat-min: 0.08;
+  --heat-span: 0.52;
 
   /* radii, shadows */
   --radius-sm: 6px;
@@ -54,6 +60,8 @@
   --ok: 74 200 120;
   --warn: 251 191 36;
   --danger: 248 113 113;
+  --heat-min: 0.12;
+  --heat-span: 0.52;
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
   --shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
   --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.6);

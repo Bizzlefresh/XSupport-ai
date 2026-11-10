@@ -4,7 +4,7 @@ AI-assisted IT helpdesk and incident management platform. Master of Applied Comp
 
 **Data and access boundaries.** XSupport AI runs entirely on *synthetic* data and does not connect to TeamDynamix or any StFX system. The TeamDynamix adapter (Phase 7) is optional, disabled by default, and must not be enabled without written StFX authorization. Nothing in this repository represents real StFX incidents.
 
-**Status:** Phase 7 (optional TeamDynamix adapter, mock-tested only) complete. Thesis-ready results: docs/results.md. See [docs/progress.md](docs/progress.md).
+**Status:** Backend phases 1-8 and the UI redesign (phases 1-7) are complete. Thesis-ready results: docs/results.md. See [docs/progress.md](docs/progress.md) and [docs/limitations.md](docs/limitations.md).
 
 ## Quick start (Docker)
 
@@ -58,18 +58,20 @@ The synthetic dataset changed in Phase 3. To match it exactly (this deletes tick
 
 ```bash
 cd backend && ruff check . && pytest -q
-cd frontend && npm run typecheck && npm run build
+cd frontend && npm run lint && npm run typecheck && npm run build
 ```
 
 End-to-end tests (Playwright, `frontend/e2e`) run against a throwaway Docker stack on ports 3001/8001 with its own
-database, seeded and deleted afterwards, so the demo data is never changed. Needs Docker and `SEED_TECH_PASSWORD` in `.env`:
+database, seeded and deleted afterwards, so the demo data is never changed. They include rendering at four widths in
+light and dark mode, the main workflows, and axe-core WCAG 2.1 A/AA scans. Needs Docker and `SEED_TECH_PASSWORD` in `.env`
+(`SEED_ADMIN_PASSWORD` enables the admin-only tests):
 
 ```bash
 scripts/e2e.sh                 # all tests; screenshots land in frontend/e2e-artifacts/
 scripts/e2e.sh -g workflows    # extra arguments go to `playwright test`
 ```
 
-CI (`.github/workflows/ci.yml`) also runs migrations up/down/up against PostgreSQL.
+CI (`.github/workflows/ci.yml`) also runs migrations up/down/up against PostgreSQL, ESLint, and the e2e suite.
 
 ## Layout
 

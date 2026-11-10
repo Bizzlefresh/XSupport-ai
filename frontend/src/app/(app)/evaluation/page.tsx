@@ -3,12 +3,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, Bot, Gauge, Grid3x3, ListChecks, ScrollText, Tags, Users, XCircle } from "lucide-react";
 
-import { EmptyState, ErrorState, InlineBar, PageHeader, SectionCard, Skeleton, tbl } from "@/components/ui/primitives";
+import { EmptyState, ErrorState, InlineBar, PageHeader, ScrollBox, SectionCard, Skeleton, tbl } from "@/components/ui/primitives";
 import { AssistantReportView } from "@/features/ai/AssistantReportView";
 import { IncidentReportView } from "@/features/ai/IncidentReportView";
 import { RetrievalReportView } from "@/features/knowledge/RetrievalReportView";
 import { api } from "@/lib/api";
-import { heat } from "@/lib/chart";
+import { heat, heatText } from "@/lib/chart";
 import { cn } from "@/lib/utils";
 import type { ClassificationReport, EvaluationSummary, ModelReport } from "@/types/api";
 
@@ -34,7 +34,7 @@ function Metric({ label, value, sub }: { label: string; value: string; sub?: str
 function Confusion({ m }: { m: ModelReport["test"]["confusion_matrix"] }) {
   const short = (s: string) => s.split(" ")[0];
   return (
-    <div className="relative -mx-5 overflow-x-auto px-5">
+    <ScrollBox label="Confusion matrix" className="px-5">
       <table className="border-separate border-spacing-0.5 text-xs">
         <caption className="sr-only">Confusion matrix on the test set: rows are true categories, columns are predicted categories.</caption>
         <thead>
@@ -51,7 +51,7 @@ function Confusion({ m }: { m: ModelReport["test"]["confusion_matrix"] }) {
                   const h = heat(v, total);
                   return (
                     <td key={j} title={`True ${m.labels[i]}, predicted ${m.labels[j]}: ${v}`}
-                      className={cn("tabular h-9 w-11 rounded text-center", i === j && "ring-1 ring-inset ring-ink/30", h.strong ? "font-medium text-on-brand" : "text-ink")}
+                      className={cn("tabular h-9 w-11 rounded text-center", i === j && "ring-1 ring-inset ring-ink/30", heatText(h.strong))}
                       style={{ background: h.background }}>
                       {v || ""}
                     </td>
@@ -63,7 +63,7 @@ function Confusion({ m }: { m: ModelReport["test"]["confusion_matrix"] }) {
         </tbody>
       </table>
       <p className="mt-3 text-xs text-muted">Correct predictions are on the outlined diagonal. Shading shows each row&apos;s share; every count is printed.</p>
-    </div>
+    </ScrollBox>
   );
 }
 
@@ -104,7 +104,7 @@ function ClassifierReport({ r }: { r: ClassificationReport }) {
 
       <SectionCard id="cmp" title="Model comparison (test set)" icon={ListChecks}
         note="The deployed model was chosen on validation macro-F1 only. Test sets are small, so read the intervals, not just the point values.">
-        <div className={tbl.wrap}>
+        <ScrollBox label="Model comparison">
           <table className={tbl.table}>
             <caption className="sr-only">Model comparison on the test set</caption>
             <thead className={tbl.thead}><tr>
@@ -133,7 +133,7 @@ function ClassifierReport({ r }: { r: ClassificationReport }) {
               })}
             </tbody>
           </table>
-        </div>
+        </ScrollBox>
         {diff && (
           <p className="mt-4 text-sm">
             Logistic regression vs SVM accuracy difference: <b className="tabular">{diff.mean >= 0 ? "+" : ""}{f3(diff.mean)}</b>{" "}
@@ -144,7 +144,7 @@ function ClassifierReport({ r }: { r: ClassificationReport }) {
 
       <div className="grid items-start gap-6 2xl:grid-cols-2">
         <SectionCard id="percat" title="Per-category results (deployed, test)" icon={Tags}>
-          <div className={tbl.wrap}>
+          <ScrollBox label="Per-category results">
             <table className={tbl.table}>
               <caption className="sr-only">Per-category precision, recall and F1</caption>
               <thead className={tbl.thead}><tr>
@@ -163,7 +163,7 @@ function ClassifierReport({ r }: { r: ClassificationReport }) {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollBox>
         </SectionCard>
         <SectionCard id="cm" title="Confusion matrix (deployed, test)" icon={Grid3x3}><Confusion m={deployed.test.confusion_matrix} /></SectionCard>
       </div>
@@ -177,7 +177,7 @@ function ClassifierReport({ r }: { r: ClassificationReport }) {
           <Metric label="Errors caught by the threshold" value={`${t.errors_caught_by_threshold} / ${t.total_errors}`} sub={`${t.sent_to_manual_review} sent to manual review`} />
         </dl>
         <h3 className="mt-6 text-xs font-medium uppercase tracking-wide text-muted">Calibration by confidence range</h3>
-        <div className={cn(tbl.wrap, "mt-2")}>
+        <ScrollBox label="Calibration by confidence range" className="mt-2">
           <table className={tbl.table}>
             <caption className="sr-only">Calibration: mean confidence versus actual accuracy per confidence range</caption>
             <thead className={tbl.thead}><tr>
@@ -197,7 +197,7 @@ function ClassifierReport({ r }: { r: ClassificationReport }) {
                 </td>
               </tr>))}</tbody>
           </table>
-        </div>
+        </ScrollBox>
         <p className="mt-2 text-xs text-muted">Bar: actual accuracy. Marker: mean confidence. A marker right of the bar end means the model was over-confident in that range.</p>
       </SectionCard>
 

@@ -44,7 +44,27 @@ test.describe("rendering", () => {
         await expect(page.getByRole("heading", { name: "Category classifier" })).toBeVisible();
         await expect(page.getByRole("note").filter({ hasText: "synthetic data" })).toBeVisible();
         await checkPage(page, "evaluation", width, theme);
+
+        await page.goto("/settings");
+        await expect(page.getByRole("heading", { name: "Integrations and data" })).toBeVisible();
+        // TeamDynamix must show as disabled: authorization was not granted.
+        await expect(page.getByRole("term").filter({ hasText: "TeamDynamix" })).toBeVisible();
+        await expect(page.getByRole("definition").filter({ hasText: "Disabled" }).first()).toBeVisible();
+        await checkPage(page, "settings", width, theme);
         expect(errors, "console errors").toEqual([]);
+      });
+
+      test(`login page at ${width}px in ${theme} mode`, async ({ page }) => {
+        await setup(page, width, theme);
+        const errors = trackErrors(page);
+        await page.goto("/login");
+        await expect(page.getByRole("button", { name: "Sign in" })).toBeDisabled();
+        await page.getByLabel("Email").fill("tech@xsupport.example.com");
+        await page.getByLabel("Password").fill("definitely-wrong");
+        await page.getByRole("button", { name: "Sign in" }).click();
+        await expect(page.getByRole("alert")).toBeVisible();
+        await checkPage(page, "login", width, theme);
+        expect(errors.filter((e) => !/401|Unauthorized/i.test(e)), "console errors").toEqual([]);
       });
     }
   }

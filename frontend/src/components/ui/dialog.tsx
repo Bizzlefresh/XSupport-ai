@@ -17,6 +17,8 @@ export function Dialog({ open, onClose, title, children, className, label }: {
     if (!open && d.open) d.close();
   }, [open]);
   return (
+    // Backdrop click is a mouse convenience; the native <dialog> already closes on Esc for keyboard users.
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <dialog
       ref={ref}
       aria-label={title ? undefined : label}

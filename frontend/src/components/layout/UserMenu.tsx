@@ -15,7 +15,7 @@ export function UserMenu() {
     <Dropdown label="Account menu" className="h-9 gap-2 pl-1 pr-2"
               trigger={<>
                 <span aria-hidden className="flex h-7 w-7 items-center justify-center rounded-full bg-brand text-xs font-semibold text-on-brand">{initials}</span>
-                <span className="hidden text-sm font-medium lg:block">{user.full_name}</span>
+                <span className="sr-only text-sm font-medium lg:not-sr-only">{user.full_name}</span><span className="sr-only">, account menu</span>
               </>}>
       <div className="border-b border-line px-3 py-2">
         <p className="truncate text-sm font-medium">{user.full_name}</p>
