@@ -22,4 +22,6 @@ compose exec -T backend python ../scripts/seed_database.py | grep -v -i password
 
 docker run --rm --network host --ipc=host \
   -e E2E_BASE_URL=http://localhost:3001 -e E2E_PASSWORD="$PW" -e E2E_ADMIN_PASSWORD="$ADMIN_PW" \
-  -v "$PWD/frontend":/app -w /app "$PLAYWRIGHT_IMAGE" npx playwright test "$@"
+  -v "$PWD/frontend":/app -w /app "$PLAYWRIGHT_IMAGE" \
+  sh -c '[ -d node_modules/@playwright/test ] || npm ci --no-audit --no-fund >/dev/null; exec npx playwright test "$@"' sh "$@"
+# ^ installs dependencies on a fresh checkout (e.g. in CI); arguments still reach `playwright test` unchanged.
