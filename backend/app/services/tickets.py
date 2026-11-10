@@ -1,19 +1,26 @@
+import re
 from datetime import UTC, datetime
 
 from fastapi import HTTPException, status
-from sqlalchemy import Select, func, or_, select
+from sqlalchemy import Select, case, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import Category, Ticket, TicketActivity, TicketStatus, User
 from app.models.ticket import Priority
 from app.schemas.ticket import TicketCreate, TicketUpdate
 
+# Priority and status sort by an explicit rank, not by the stored value: text order (SQLite) and native enum
+# order (PostgreSQL) disagree, and neither puts critical above high. Descending priority = most urgent first;
+# ascending status = workflow order (new, open, pending, resolved, closed).
+_PRIORITY_RANK = case({Priority.critical: 3, Priority.high: 2, Priority.medium: 1, Priority.low: 0}, value=Ticket.priority)
+_STATUS_RANK = case({s: i for i, s in enumerate(TicketStatus)}, value=Ticket.status)
 SORTS = {
     "created_at": Ticket.created_at,
     "updated_at": Ticket.updated_at,
-    "priority": Ticket.priority,
-    "status": Ticket.status,
+    "priority": _PRIORITY_RANK,
+    "status": _STATUS_RANK,
 }
+_TICKET_NUMBER = re.compile(r"^(?:xs-?)?(\d{1,9})$", re.IGNORECASE)
 RESOLVED_STATES = {TicketStatus.resolved, TicketStatus.closed}
 UNPROCESSABLE = 422
 
@@ -105,9 +112,13 @@ def list_query(q: str | None, status_: TicketStatus | None, priority: Priority |
                category_id: int | None, assignee_id: int | None, unassigned: bool) -> Select:
     stmt = select(Ticket)
     if q:
-        stmt = stmt.where(or_(Ticket.subject.icontains(q, autoescape=True),
-                              Ticket.description.icontains(q, autoescape=True),
-                              Ticket.external_id.icontains(q, autoescape=True)))
+        conds = [Ticket.subject.icontains(q, autoescape=True),
+                 Ticket.description.icontains(q, autoescape=True),
+                 Ticket.external_id.icontains(q, autoescape=True)]
+        # The UI shows ticket numbers as XS-00042 (derived from the id), so accept that form, XS42, or bare digits.
+        if m := _TICKET_NUMBER.match(q.strip()):
+            conds.append(Ticket.id == int(m.group(1)))
+        stmt = stmt.where(or_(*conds))
     if status_:
         stmt = stmt.where(Ticket.status == status_)
     if priority:

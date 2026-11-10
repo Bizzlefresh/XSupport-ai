@@ -85,6 +85,35 @@ def test_filter_search_sort_paginate(client, h, cats):
     assert client.get("/api/tickets?sort=password", headers=h).status_code == 422
 
 
+def test_search_by_displayed_ticket_number(client, h):
+    make(client, h, subject="Other one", description="x")
+    t = make(client, h, subject="Target", description="y")
+    number = f"XS-{t['id']:05d}"
+    for q in (number, number.lower(), f"XS{t['id']}", str(t["id"]).zfill(5)):
+        items = client.get("/api/tickets", params={"q": q}, headers=h).json()["items"]
+        assert [i["id"] for i in items] == [t["id"]], q
+    # Plain words still search text only.
+    assert client.get("/api/tickets?q=Target", headers=h).json()["total"] == 1
+
+
+def test_priority_and_status_sort_by_rank_not_text(client, h):
+    # Text order would give critical, high, low, medium; enum order differs by database. Rank order must not.
+    for p in ("medium", "low", "critical", "high"):
+        make(client, h, subject=f"P {p}", description="x", priority=p)
+
+    def order(qs):
+        return [t["priority"] for t in client.get(f"/api/tickets?{qs}", headers=h).json()["items"]]
+
+    assert order("sort=priority&desc=true") == ["critical", "high", "medium", "low"]
+    assert order("sort=priority&desc=false") == ["low", "medium", "high", "critical"]
+
+    ids = [t["id"] for t in client.get("/api/tickets", headers=h).json()["items"]]
+    for tid, st in zip(ids, ("pending", "closed", "open", "new"), strict=True):
+        client.patch(f"/api/tickets/{tid}", json={"status": st}, headers=h)
+    statuses = [t["status"] for t in client.get("/api/tickets?sort=status&desc=false", headers=h).json()["items"]]
+    assert statuses == ["new", "open", "pending", "closed"]
+
+
 def test_comment_and_404(client, h):
     t = make(client, h)
     r = client.post(f"/api/tickets/{t['id']}/comments", json={"body": "Called user"}, headers=h)
